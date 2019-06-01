@@ -1,0 +1,12 @@
+<button (click)="goBack()">Back</button>
+<div>
+    Title<br>
+    <input #title><br>
+    Author(s)<br>
+    <input #author><br>
+    Categories<br>
+    <input #category><br>
+    Content<br>
+    <textarea #content></textarea><br>
+    <button (click)="onSaveArticle(title.value, author.value, category.value, content.value)">Save</button>
+</div>
