@@ -8,5 +8,5 @@
     <input #category><br>
     Content<br>
     <textarea #content></textarea><br>
-    <button (click)="onSaveArticle(title.value, author.value, category.value, content.value)">Save</button>
+    <button (click)="onSaveArticle(title.value, author.value, category.value, content.value); title.value='';author.value='';category.value='';content.value='';">Save</button>
 </div>

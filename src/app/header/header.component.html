@@ -1,5 +1,7 @@
 <div>
-    <span><a routerLink="/">Home</a></span>
+    <span><a routerLink="/">Home</a></span><br>
+    <input type="text" [(ngModel)]="searchId">
+    <a [routerLink]="['/display', searchId]">Search</a>
     <ul>
       <li><a routerLink="/create">Create</a></li>
       <li><a routerLink="/edit">Edit</a></li>

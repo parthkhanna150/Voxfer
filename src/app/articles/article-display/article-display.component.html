@@ -1,0 +1,6 @@
+<div>
+  <h1>{{article.title}}</h1>
+  <h3 *ngFor="let author of article.authors">{{author.name}}</h3>
+  <h5 *ngFor="let category of article.categories">{{category.name}}</h5>
+  <p>{{article.content}}</p>
+</div>

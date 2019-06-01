@@ -3,6 +3,8 @@ import { Article } from './models/article';
 import { articles } from './models/mock-articles';
 import { Category } from './models/category';
 import { User } from './models/user';
+import { Router } from '@angular/router';
+import { debug } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,9 @@ import { User } from './models/user';
 export class ArticleService {
   articles: Article[] = articles;
 
-  addArticle(title: string, author: string, tag: string, content: string) {
+  constructor(public router: Router) {}
 
+  addArticle(title: string, author: string, tag: string, content: string) {
     const article: Article = {
       id: '3',
       authors: [
@@ -32,7 +35,13 @@ export class ArticleService {
     this.articles.push(article);
   }
 
+  getArticle(id: string) {
+    const article: Article =  this.articles.find((item) => item.id === id);
+    return article;
+  }
+
   getArticles() {
     return this.articles;
   }
+
 }

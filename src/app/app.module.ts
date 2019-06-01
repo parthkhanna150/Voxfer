@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ArticleDisplayComponent } from './articles/article-display/article-display.component';
 import { ArticleCreateComponent } from './articles/article-create/article-create.component';
 // import {
 //   MatInputModule,
@@ -22,6 +23,7 @@ import { ArticleListComponent } from './articles/article-list/article-list.compo
     ArticleCreateComponent,
     HeaderComponent,
     ArticleListComponent,
+    ArticleDisplayComponent
     // MatInputModule,
     // MatButtonModule,
     // MatFormFieldModule,
