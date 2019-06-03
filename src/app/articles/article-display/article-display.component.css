@@ -1,0 +1,11 @@
+mat-chip-list {
+  float: left;
+}
+mat-card {
+  margin: auto;
+  margin-top: 2rem;
+  width: 70%;
+}
+mat-card-content {
+  margin-top: 2rem;
+}

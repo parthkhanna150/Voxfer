@@ -14,7 +14,8 @@ export class ArticleService {
 
   constructor(public router: Router) {}
 
-  addArticle(title: string, author: string, tag: string, content: string) {
+  addArticle(title: string, author: string, tags: Category[], content: string) {
+    debugger
     const article: Article = {
       id: '3',
       authors: [
@@ -26,11 +27,7 @@ export class ArticleService {
       ],
       title: title,
       content: content,
-      categories: [
-        {
-          name: tag,
-        }
-      ]
+      categories: tags
     };
     this.articles.push(article);
   }

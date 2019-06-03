@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-article-diplay',
-  templateUrl: './article-display.component.html'
+  templateUrl: './article-display.component.html',
+  styleUrls: ['./article-display.component.css']
 })
 export class ArticleDisplayComponent implements OnInit {
   article: Article;

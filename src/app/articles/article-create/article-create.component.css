@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.editContainer{
+  margin: auto;
+  width: 70%;
+  padding: 50px;
+}
+
+textarea {
+  height: 300px;
+}

@@ -1,9 +1,11 @@
-<div>
-    <span><a routerLink="/">Home</a></span><br>
-    <input type="text" [(ngModel)]="searchId">
-    <a [routerLink]="['/display', searchId]">Search</a>
-    <ul>
-      <li><a routerLink="/create">Create</a></li>
-      <li><a routerLink="/edit">Edit</a></li>
-    </ul>
-</div>
+<mat-toolbar color="primary">
+  <span><a routerLink="/">Home</a></span>
+    <span class="spacer"></span>
+    <div>
+        <input placeholder="Write here..." [(ngModel)]="searchId">
+        <button mat-button [routerLink]="['/display', searchId]">Search</button>
+    </div>
+    <span class="spacer"></span>
+    <span><a routerLink="/create">Create </a></span>
+    <span><a routerLink="/edit"> Edit</a></span>
+</mat-toolbar>

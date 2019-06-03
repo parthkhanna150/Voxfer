@@ -1,21 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { ArticleDisplayComponent } from './articles/article-display/article-display.component';
 import { ArticleCreateComponent } from './articles/article-create/article-create.component';
-// import {
-//   MatInputModule,
-//   MatButtonModule,
-//   MatFormFieldModule,
-//   MatCardModule,
-//   MatToolbarModule } from '@angular/material';
+import {
+  MatInputModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatCardModule,
+  MatToolbarModule,
+  MatChipsModule,
+  MatDividerModule,
+  MatIconModule,
+  MatAutocompleteModule } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
+import { CategoryService } from './category.service';
+import { ArticleService } from './article.service';
 
 @NgModule({
   declarations: [
@@ -23,20 +30,26 @@ import { ArticleListComponent } from './articles/article-list/article-list.compo
     ArticleCreateComponent,
     HeaderComponent,
     ArticleListComponent,
-    ArticleDisplayComponent
-    // MatInputModule,
-    // MatButtonModule,
-    // MatFormFieldModule,
-    // MatCardModule,
-    // MatToolbarModule
+    ArticleDisplayComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatDividerModule,
+    MatChipsModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MarkdownModule.forRoot()
   ],
-  providers: [],
+  providers: [CategoryService, ArticleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

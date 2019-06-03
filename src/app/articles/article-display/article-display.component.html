@@ -1,6 +1,17 @@
-<div>
-  <h1>{{article.title}}</h1>
-  <h3 *ngFor="let author of article.authors">{{author.name}}</h3>
-  <h5 *ngFor="let category of article.categories">{{category.name}}</h5>
-  <p>{{article.content}}</p>
-</div>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{article.title}}</mat-card-title>
+        <mat-card-subtitle *ngFor="let author of article.authors">{{author.name}}</mat-card-subtitle>
+    </mat-card-header>
+  <div>
+      <mat-chip-list *ngFor="let category of article.categories" aria-label="categories">
+        <mat-chip>{{category.name}}</mat-chip>
+      </mat-chip-list>
+  </div>
+  <br>
+  <br>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+      <markdown [data]="article.content"></markdown>
+  </mat-card-content>
+</mat-card>

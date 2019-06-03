@@ -1,12 +1,43 @@
-<button (click)="goBack()">Back</button>
-<div>
-    Title<br>
-    <input #title><br>
-    Author(s)<br>
-    <input #author><br>
-    Categories<br>
-    <input #category><br>
-    Content<br>
-    <textarea #content></textarea><br>
-    <button (click)="onSaveArticle(title.value, author.value, category.value, content.value); title.value='';author.value='';category.value='';content.value='';">Save</button>
+<div class="editContainer">
+  <form class="container">
+      <mat-form-field>
+        <input #title matInput placeholder="Title">
+      </mat-form-field>
+      <mat-form-field>
+        <input #author matInput placeholder="Authors">
+      </mat-form-field>
+      <mat-form-field>
+          <mat-chip-list #chipList aria-label="Category selection">
+            <mat-chip
+              *ngFor="let category of categories"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(category)">
+              {{category.name}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Categories..."
+              #categoryInput
+              [formControl]="categoryCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let category of filteredCategories | async" [value]="category.name">
+              {{category.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      <mat-form-field>
+        <textarea #content matInput placeholder="Content"></textarea>
+      </mat-form-field>
+      <div>
+          <button mat-raised-button (click)="goBack()">Back</button>
+          <button mat-raised-button color="primary" (click)="onSaveArticle(title.value, author.value, content.value); title.value='';author.value='';content.value='';goBack();"> Save</button>
+      </div>
+    </form>
 </div>
