@@ -9,6 +9,7 @@ import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-article-create',
@@ -25,6 +26,10 @@ export class ArticleCreateComponent {
   filteredCategories: Observable<Category[]>;
   categories: Category[] = [{name: 'Chemistry'}];
   allCategories: Category[] = this.categoryService.getCategories();
+  public Editor = ClassicEditor;
+  public model = {
+    editorData: '<p>Hello, world!</p>'
+  };
 
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -81,7 +86,7 @@ export class ArticleCreateComponent {
     this.location.back();
   }
 
-  onSaveArticle(title, author, content) {
-    this.articleService.addArticle(title, author, this.categories, content);
+  onSaveArticle(title, author) {
+    this.articleService.addArticle(title, author, this.categories, this.model.editorData);
   }
 }

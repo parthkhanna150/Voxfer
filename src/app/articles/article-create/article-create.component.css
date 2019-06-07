@@ -9,6 +9,11 @@
   padding: 50px;
 }
 
-textarea {
-  height: 300px;
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 500px;
+  margin-bottom: 1rem;
+}
+
+button {
+  margin: 0.3rem;
 }

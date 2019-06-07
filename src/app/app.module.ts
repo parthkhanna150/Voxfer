@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MarkdownModule } from 'ngx-markdown';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { ArticleDisplayComponent } from './articles/article-display/article-display.component';
 import { ArticleCreateComponent } from './articles/article-create/article-create.component';
@@ -47,7 +48,8 @@ import { ArticleService } from './article.service';
     MatChipsModule,
     MatIconModule,
     MatAutocompleteModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    CKEditorModule
   ],
   providers: [CategoryService, ArticleService],
   bootstrap: [AppComponent]

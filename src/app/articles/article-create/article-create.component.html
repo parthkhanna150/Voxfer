@@ -1,5 +1,5 @@
 <div class="editContainer">
-  <form class="container">
+  <div class="container">
       <mat-form-field>
         <input #title matInput placeholder="Title">
       </mat-form-field>
@@ -32,12 +32,12 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-      <mat-form-field>
-        <textarea #content matInput placeholder="Content"></textarea>
-      </mat-form-field>
-      <div>
+
+        <ckeditor tagName="textarea" [(ngModel)]="model.editorData" [editor]="Editor"></ckeditor>
+
+        <div>
           <button mat-raised-button (click)="goBack()">Back</button>
-          <button mat-raised-button color="primary" (click)="onSaveArticle(title.value, author.value, content.value); title.value='';author.value='';content.value='';goBack();"> Save</button>
+          <button mat-raised-button color="primary" (click)="onSaveArticle(title.value, author.value); title.value='';author.value='';goBack();"> Save</button>
+        </div>
       </div>
-    </form>
 </div>

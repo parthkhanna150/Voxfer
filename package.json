@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0 ",
     "@angular/router": "~7.2.0",
+    "@ckeditor/ckeditor5-angular": "^1.1.0",
+    "@ckeditor/ckeditor5-build-classic": "^12.2.0",
     "body-parser": "^1.19.0",
     "core-js": "^2.5.4",
     "express": "^4.17.0",

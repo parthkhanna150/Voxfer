@@ -15,7 +15,6 @@ export class ArticleService {
   constructor(public router: Router) {}
 
   addArticle(title: string, author: string, tags: Category[], content: string) {
-    debugger
     const article: Article = {
       id: '3',
       authors: [
