@@ -26,8 +26,8 @@ export class ArticleCreateComponent {
   categories: Category[] = [{name: 'Chemistry'}];
   allCategories: Category[] = this.categoryService.getCategories();
 
-  @ViewChild('categoryInput', {static: false}) categoryInput: ElementRef<HTMLInputElement>;
-  @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
+  @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(private location: Location,
               public articleService: ArticleService,
