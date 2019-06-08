@@ -1,15 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose');
 const app = express();
+const Article = require('./model/article');
 
-// mongoose.connect('mongodb+srv://Parth:kZK95wmYkYJMcdH0@cluster0-cneed.mongodb.net/test?retryWrites=true&w=majority')
-//   .then(() => {
-//     console.log('connected to database');
-//   })
-//   .catch(() => {
-//     console.log('connection failed');
-//   });
+const api_key = require('../app_env');
+
+mongoose.connect("mongodb+srv://Parth:"+api_key+"@cluster0-cneed.mongodb.net/test?retryWrites=true&w=majority")
+  .then(() => {
+    console.log('connected to database');
+  })
+  .catch(() => {
+    console.log('connection failed');
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +23,7 @@ app.use((req,res,next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
   next();
 });
+
 
 // app.post("/api/articles", (req, res, next) => {
 //   console.log
@@ -70,8 +74,14 @@ app.get('/api/articles',(req, res, next) => {
 });
 
 app.post('/api/articles', (req, res, next) => {
-  const article = req.body;
-  console.log(article);
+  const article = new Article({
+    authors: req.body.authors,
+    title: req.body.title,
+    content: req.body.content,
+    categories: req.body.categories
+  });
+  article.save();
+  // console.log(article);
   res.status(201).json({
     message: 'Post added successfully!'
   });

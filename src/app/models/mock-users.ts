@@ -3,10 +3,15 @@ import { User } from './user';
 export const users: User[] = [
   {
     name: 'Shaurya',
-    type: 'Admin'
+    level: 'Admin'
   },
   {
     name: 'Parth',
-    type: 'Guest'
+    level: 'Guest'
+  },
+  {
+    name: 'Parth',
+    level: 'Guest'
   }
+
 ];

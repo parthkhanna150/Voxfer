@@ -21,14 +21,13 @@ export class ArticleService {
       authors: [
         {
           name: author,
-          type: 'guest'
+          level: 'guest'
         }
       ],
       title: title,
       content: content,
       categories: tags
     };
-    debugger
     this.http.post<{message: string}>('http://localhost:3000/api/articles', article)
       .subscribe((response) => {
         console.log(response.message);

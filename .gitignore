@@ -5,6 +5,9 @@
 /tmp
 /out-tsc
 
+#keys and tokens
+app-env.js
+
 # dependencies
 /node_modules
 
