@@ -22,7 +22,6 @@ import {
   MatAutocompleteModule } from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
-import { CategoryService } from './category.service';
 import { ArticleService } from './article.service';
 
 @NgModule({
@@ -51,7 +50,7 @@ import { ArticleService } from './article.service';
     MarkdownModule.forRoot(),
     CKEditorModule
   ],
-  providers: [CategoryService, ArticleService],
+  providers: [ArticleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

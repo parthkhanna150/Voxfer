@@ -1,25 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Article } from './models/article';
 import { articles } from './models/mock-articles';
-import { Category } from './models/category';
-import { User } from './models/user';
 import { Router } from '@angular/router';
-import { debug } from 'util';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
   articles: Article[] = articles;
+  private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router) {}
 
-  addArticle(title: string, author: string, tags: Category[], content: string) {
+  addArticle(title: string, author: string, tags: String[], content: string) {
     const article: Article = {
-      id: '3',
       authors: [
         {
-          id: '2uehwj',
           name: author,
           type: 'guest'
         }
@@ -29,15 +26,20 @@ export class ArticleService {
       categories: tags
     };
     this.articles.push(article);
+    this.articlesUpdated.next([...this.articles]);
   }
 
-  getArticle(id: string) {
-    const article: Article =  this.articles.find((item) => item.id === id);
+  getArticleUpdateListener() {
+    return this.articlesUpdated.asObservable();
+  }
+
+  getArticle(title: string) {
+    const article: Article =  this.articles.find((item) => item.title === title);
     return article;
   }
 
   getArticles() {
-    return this.articles;
+    return [...this.articles];
   }
 
 }

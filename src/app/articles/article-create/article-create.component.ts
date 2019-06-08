@@ -1,15 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {Location} from '@angular/common';
 import { ArticleService } from 'src/app/article.service';
-import { CategoryService } from 'src/app/category.service';
 import { MatChipInputEvent } from '@angular/material';
-import { Category } from 'src/app/models/category';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {FormControl} from '@angular/forms';
+import {FormControl, NgForm} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { categories } from 'src/app/models/mock-categories';
 
 @Component({
   selector: 'app-article-create',
@@ -23,9 +22,9 @@ export class ArticleCreateComponent {
   addOnBlur = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   categoryCtrl = new FormControl();
-  filteredCategories: Observable<Category[]>;
-  categories: Category[] = [{name: 'Chemistry'}];
-  allCategories: Category[] = this.categoryService.getCategories();
+  filteredCategories: Observable<String[]>;
+  categories: String[] = ['Chemistry'];
+  allCategories: String[] = categories;
   public Editor = ClassicEditor;
   public model = {
     editorData: '<p>Hello, world!</p>'
@@ -35,8 +34,7 @@ export class ArticleCreateComponent {
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(private location: Location,
-              public articleService: ArticleService,
-              public categoryService: CategoryService) {
+              public articleService: ArticleService) {
     this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
         startWith(null),
         map((category: string | null) => category ? this._filter(category) : this.allCategories.slice()));
@@ -51,7 +49,7 @@ export class ArticleCreateComponent {
 
       // Add our category
       if ((value || '').trim()) {
-        this.categories.push({name: value.trim()});
+        this.categories.push(value.trim());
       }
 
       // Reset the input value
@@ -63,7 +61,7 @@ export class ArticleCreateComponent {
     }
   }
 
-  remove(category: Category): void {
+  remove(category: String): void {
     const index = this.categories.indexOf(category);
 
     if (index >= 0) {
@@ -72,21 +70,25 @@ export class ArticleCreateComponent {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.categories.push({name: event.option.viewValue});
+    this.categories.push(event.option.viewValue);
     this.categoryInput.nativeElement.value = '';
     this.categoryCtrl.setValue(null);
   }
 
-  private _filter(value: string): Category[] {
+  private _filter(value: string): String[] {
     const filterValue = value;
-    return this.allCategories.filter(category => (category.name.toLowerCase()).indexOf(filterValue.toLowerCase()) === 0);
+    return this.allCategories.filter(category => (category.toLowerCase()).indexOf(filterValue.toLowerCase()) === 0);
   }
 
   goBack() {
     this.location.back();
   }
 
-  onSaveArticle(title, author) {
-    this.articleService.addArticle(title, author, this.categories, this.model.editorData);
+  onSaveArticle(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    this.articleService.addArticle(form.value.title, form.value.author, this.categories, this.model.editorData);
+    form.resetForm();
   }
 }
