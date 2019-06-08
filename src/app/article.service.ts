@@ -3,6 +3,7 @@ import { Article } from './models/article';
 import { articles } from './models/mock-articles';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ export class ArticleService {
   articles: Article[] = articles;
   private articlesUpdated = new Subject<Article[]>();
 
-  constructor(public router: Router) {}
+  constructor(public router: Router,
+              private http: HttpClient) {}
 
   addArticle(title: string, author: string, tags: String[], content: string) {
     const article: Article = {
+      id: null,
       authors: [
         {
           name: author,
@@ -25,9 +28,16 @@ export class ArticleService {
       content: content,
       categories: tags
     };
-    this.articles.push(article);
-    this.articlesUpdated.next([...this.articles]);
+    debugger
+    this.http.post<{message: string}>('http://localhost:3000/api/articles', article)
+      .subscribe((response) => {
+        console.log(response.message);
+        this.articles.push(article);
+        this.articlesUpdated.next([...this.articles]);
+      });
+
   }
+
 
   getArticleUpdateListener() {
     return this.articlesUpdated.asObservable();
@@ -39,7 +49,13 @@ export class ArticleService {
   }
 
   getArticles() {
-    return [...this.articles];
+    this.http.get<{message: String, articles: Article[]}>('http://localhost:3000/api/articles')
+      .subscribe((response) => {
+        this.articles = response.articles;
+        this.articlesUpdated.next([...this.articles]);
+      });
+
+    // return [...this.articles];
   }
 
 }

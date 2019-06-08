@@ -13,7 +13,7 @@ export class  ArticleListComponent implements OnInit, OnDestroy {
   constructor(public articleService: ArticleService) {}
 
   ngOnInit() {
-    this.getArticles();
+    this.articleService.getArticles();
     this.articlesSub = this.articleService.getArticleUpdateListener()
       .subscribe((articles: Article[]) => {
         this.articles = articles;
@@ -22,9 +22,5 @@ export class  ArticleListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.articlesSub.unsubscribe();
-  }
-
-  getArticles() {
-    this.articles = this.articleService.getArticles();
   }
 }

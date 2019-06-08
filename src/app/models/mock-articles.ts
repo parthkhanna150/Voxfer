@@ -4,12 +4,14 @@ import { users } from './mock-users';
 
  export const articles: Article[] = [
     {
+      id: null,
       authors: users,
       title: 'Test Title 1',
       content: 'Test Content 1',
       categories: categories.slice(3, 6)
     },
     {
+      id: null,
       authors: [users[0]],
       title: 'Test Title 2',
       content: 'Test Content 2',

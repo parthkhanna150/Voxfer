@@ -69,6 +69,14 @@ app.get('/api/articles',(req, res, next) => {
   // });
 });
 
+app.post('/api/articles', (req, res, next) => {
+  const article = req.body;
+  console.log(article);
+  res.status(201).json({
+    message: 'Post added successfully!'
+  });
+});
+
 // app.get("/api/articles/:id", (req, res, next) => {
 //   Post.find({_id: req.params.id})
 //     .then((result) => console.log(result));
