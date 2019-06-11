@@ -1,11 +1,31 @@
 mat-chip-list {
   float: left;
 }
-mat-card {
-  margin: auto;
-  margin-top: 2rem;
-  width: 70%;
+
+.content-card {
+  margin-left: auto;
+  margin-top: 3rem;
+  margin-right: 2rem;
+  width: 75%;
 }
+
 mat-card-content {
   margin-top: 2rem;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: black;
+}
+
+/* TODO: THIS AINT RESPONSIVE YET. */
+.navigate-card {
+  position: fixed;
+  top: 7.5rem;
+  width: 15%;
+  margin-left: 2rem;
+  min-height: 100px;
 }

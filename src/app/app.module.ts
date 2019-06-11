@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
-import { ArticleDisplayComponent } from './articles/article-display/article-display.component';
+import { ArticleDisplayComponent, SafeHtmlPipe } from './articles/article-display/article-display.component';
 import { ArticleCreateComponent } from './articles/article-create/article-create.component';
 import {
   MatInputModule,
@@ -30,6 +30,7 @@ import { ArticleService } from './article.service';
     HeaderComponent,
     ArticleListComponent,
     ArticleDisplayComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,11 @@
-<mat-toolbar color="primary">
-  <span><a routerLink="/">Home</a></span>
+<mat-toolbar class="toolbar" color="primary">
+  <span><a routerLink="/">Research Wiki</a></span>
     <span class="spacer"></span>
     <div>
         <input placeholder="Write here..." [(ngModel)]="searchId">
-        <button mat-button [routerLink]="['/display', searchId]">Search</button>
+        <button mat-button [routerLink]="['display',searchId]">Search</button>
     </div>
     <span class="spacer"></span>
-    <span><a routerLink="/create">Create </a></span>
-    <span><a routerLink="/edit"> Edit</a></span>
+    <a mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
+    <!-- <span><a routerLink="/edit"> Edit</a></span> -->
 </mat-toolbar>

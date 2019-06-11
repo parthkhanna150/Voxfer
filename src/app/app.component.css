@@ -1,12 +1,3 @@
-/* a {
-  text-decoration: none;
-  color: white;
+router-outlet {
+  color:red;
 }
-
-ul {
-  list-style: none;
-}
-
-.space {
-  flex: 1 1 auto;
-} */

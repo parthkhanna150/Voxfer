@@ -1,17 +1,22 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>{{article.title}}</mat-card-title>
-        <mat-card-subtitle *ngFor="let author of article.authors">{{author.name}}</mat-card-subtitle>
-    </mat-card-header>
-  <div>
-      <mat-chip-list *ngFor="let category of article.categories" aria-label="categories">
-        <mat-chip>{{category}}</mat-chip>
-      </mat-chip-list>
-  </div>
-  <br>
-  <br>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-      <div [innerHTML]="article.content"></div>
-  </mat-card-content>
-</mat-card>
+<div class=container>
+    <mat-card class="content-card">
+        <mat-card-header>
+            <mat-card-title>{{article.title}}</mat-card-title>
+            <mat-card-subtitle *ngFor="let author of article.authors">{{author.name}}</mat-card-subtitle>
+        </mat-card-header>
+      <div>
+          <mat-chip-list *ngFor="let category of article.categories" aria-label="categories">
+            <mat-chip>{{category}}</mat-chip>
+          </mat-chip-list>
+      </div>
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+          <div [innerHTML]='article.content | safeHtml'></div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="navigate-card">
+      <ul></ul>
+    </mat-card>
+</div>

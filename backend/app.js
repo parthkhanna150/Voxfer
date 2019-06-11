@@ -24,56 +24,27 @@ app.use((req,res,next) => {
   next();
 });
 
-
-// app.post("/api/articles", (req, res, next) => {
-//   console.log
-  // const article = new Article({
-  //   authors: ['test','test'],
-  //   title: req.body.title,
-  //   content: req.body.content,
-  //   categories:  ['test','test']
-  // });
-
-  // article.save()
-  //   .then((createdPost) => {
-  //     res.status(201).json({
-  //       message: 'Article Added Successfully',
-  //       postId: createdPost._id
-  //     });
-  //   });
-// });
-
 // TODO: remove IDs from interface, OR they'll be OVERWRITTEN ???
 app.get('/api/articles',(req, res, next) => {
-  const articles = [
-    {
-      id: 'hshdhs',
-      authors: ['a1','a2'],
-      title: 'title 1',
-      content: 'content here 1',
-      categories: ['c1', 'c2']
-    },
-    {
-      id: 'ereswdfs',
-      authors: ['au1','au2'],
-      title: 'title 2',
-      content: 'content here 2',
-      categories: ['c21', 'c22']
-    }
-  ];
-  res.status(200).json({
-    message: 'Articles fetched successfully',
-    articles: articles
+  Article.find().then(documents => {
+    res.status(200).json({
+      message: 'Articles fetched successfully',
+      articles: documents
+    });
   });
-  // Post.find().then(documents => {
-  //   res.status(200).json({
-  //     message: 'articles fetched successfully',
-  //     articles: documents
+});
+
+app.get('/api/articles/:id',(req, res, next) => {
+  // Article.findOne(req.params.id)
+  //   .then(document => {
+  //     res.status(200).json({
+  //       message: 'Article fetched successfully',
+  //       article: document
   //   });
   // });
 });
 
-app.post('/api/articles', (req, res, next) => {
+app.post('/api/articles/create', (req, res, next) => {
   const article = new Article({
     authors: req.body.authors,
     title: req.body.title,
@@ -83,7 +54,7 @@ app.post('/api/articles', (req, res, next) => {
   article.save();
   // console.log(article);
   res.status(201).json({
-    message: 'Post added successfully!'
+    message: 'Article added successfully!'
   });
 });
 
