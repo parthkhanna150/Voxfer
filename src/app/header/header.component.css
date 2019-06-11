@@ -11,7 +11,7 @@ a {
   flex: 1 1 auto;
 }
 
-.toolbar {
+mat-toolbar {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
