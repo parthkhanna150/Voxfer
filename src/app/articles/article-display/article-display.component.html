@@ -1,11 +1,14 @@
 <div class=container>
     <mat-card class="content-card">
         <mat-card-header>
-            <mat-card-title>{{article.title}}</mat-card-title>
-            <mat-card-subtitle *ngFor="let author of article.authors">{{author.name}}</mat-card-subtitle>
+            <a #edit [routerLink]="['/edit', id]">
+              <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+            </a>
+            <mat-card-title>{{article?.title}}</mat-card-title>
+            <mat-card-subtitle *ngFor="let author of article?.authors">{{author.name}}</mat-card-subtitle>
         </mat-card-header>
       <div>
-          <mat-chip-list *ngFor="let category of article.categories" aria-label="categories">
+          <mat-chip-list *ngFor="let category of article?.categories" aria-label="categories">
             <mat-chip>{{category}}</mat-chip>
           </mat-chip-list>
       </div>
@@ -13,7 +16,7 @@
       <br>
       <mat-divider></mat-divider>
       <mat-card-content>
-          <div [innerHTML]='article.content | safeHtml'></div>
+          <div [innerHTML]='article?.content | safeHtml'></div>
       </mat-card-content>
     </mat-card>
     <mat-card class="navigate-card">

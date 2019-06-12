@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import {Location} from '@angular/common';
 import { ArticleService } from 'src/app/article.service';
 import { MatChipInputEvent } from '@angular/material';
@@ -9,13 +9,15 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categories } from 'src/app/models/mock-categories';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Article } from 'src/app/models/article';
 
 @Component({
   selector: 'app-article-create',
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.css']
 })
-export class ArticleCreateComponent {
+export class ArticleCreateComponent implements OnInit {
   visible = true;
   selectable = true;
   removable = true;
@@ -29,15 +31,44 @@ export class ArticleCreateComponent {
   public model = {
     editorData: '<p>Hello, world!</p>'
   };
+  private articleId = null;
+  private mode = 'create';
+  article: Article;
 
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(private location: Location,
-              public articleService: ArticleService) {
+              public articleService: ArticleService,
+              public route: ActivatedRoute) {
     this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
         startWith(null),
         map((category: string | null) => category ? this._filter(category) : this.allCategories.slice()));
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('id')) {
+        this.mode = 'edit';
+        this.articleId = paramMap.get('id');
+        this.articleService.getArticleById(this.articleId)
+          .subscribe(articleData => {
+          this.article = {
+            id: articleData.article._id,
+            title: articleData.article.title,
+            authors: articleData.article.authors,
+            content: articleData.article.content,
+            categories:  articleData.article.categories
+          };
+          // console.log(this.article);
+          this.model.editorData = this.article.content;
+          this.categories = this.article.categories;
+        });
+      } else {
+        this.mode = 'create';
+        this.articleId = null;
+      }
+    });
   }
 
   add(event: MatChipInputEvent): void {
@@ -88,7 +119,11 @@ export class ArticleCreateComponent {
     if (form.invalid) {
       return;
     }
-    this.articleService.addArticle(form.value.title, form.value.author, this.categories, this.model.editorData);
+    if (this.mode === 'create') {
+      this.articleService.addArticle(form.value.title, form.value.author, this.categories, this.model.editorData);
+    } else {
+      this.articleService.updateArticle(this.articleId, form.value.title, form.value.author, this.categories, this.model.editorData);
+    }
     form.resetForm();
   }
 }

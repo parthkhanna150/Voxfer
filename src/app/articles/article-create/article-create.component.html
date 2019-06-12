@@ -1,11 +1,11 @@
 <div class="editContainer">
   <form (submit)="onSaveArticle(articleForm)" class="container" #articleForm="ngForm">
       <mat-form-field>
-        <input matInput minlength="3" required ngModel name="title" placeholder="Title" #title="ngModel">
+        <input matInput minlength="3" required [ngModel]="article?.title" name="title" placeholder="Title" #title="ngModel">
         <mat-error *ngIf="title.invalid">Please enter a valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput minlength="2" placeholder="Authors" name="author" ngModel required #author="ngModel">
+        <input matInput minlength="2" placeholder="Authors" name="author" [ngModel]="article?.authors" required #author="ngModel">
         <mat-error *ngIf="author.invalid">Please enter a valid author</mat-error>
       </mat-form-field>
       <mat-form-field>

@@ -20,17 +20,30 @@ export class SafeHtmlPipe implements PipeTransform  {
 })
 export class ArticleDisplayComponent implements OnInit {
   article: Article;
-
+  id: string;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public articleService: ArticleService) {}
 
     ngOnInit() {
-      const id = this.route.snapshot.paramMap.get('id');
-      this.article = this.articleService.getArticle(id);
-
-      this.buildSideMenu(this.article.content);
+      this.id = this.route.snapshot.paramMap.get('id');
+      // console.log(this.id);
+      this.articleService.getArticleById(this.id)
+        .subscribe((response) => {
+          // console.log(response);
+          this.article = {
+            id: response.article._id,
+            title: response.article.title,
+            authors: response.article.authors,
+            content: response.article.content,
+            categories:  response.article.categories
+          };
+          // console.log(this.article);
+          this.article.content = this.articleService.addIdsH4s(this.article.content);
+          // console.log(this.article.content);
+          this.buildSideMenu(this.article.content);
+        });
     }
 
     buildSideMenu(content: string) {
@@ -44,7 +57,7 @@ export class ArticleDisplayComponent implements OnInit {
         const menuA = document.createElement('a');
 
         menuA.textContent = h4.textContent;
-        menuA.setAttribute('href', 'display/' + this.article.title + '#' + position);
+        menuA.setAttribute('href', 'display/' + this.article.id + '#' + position);
 
         menuLi.appendChild(menuA);
         menuUl.appendChild(menuLi);

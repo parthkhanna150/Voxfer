@@ -2,10 +2,12 @@
   <span><a routerLink="/">Research Wiki</a></span>
     <span class="spacer"></span>
     <div>
-        <input placeholder="Write here..." [(ngModel)]="searchId">
-        <button mat-button [routerLink]="['display',searchId]">Search</button>
+        <input placeholder="Write here..." [(ngModel)]="searchTitle">
+        <button mat-button [routerLink]="['display', searchTitle]">Search</button>
     </div>
     <span class="spacer"></span>
     <a mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
-    <!-- <span><a routerLink="/edit"> Edit</a></span> -->
+    <a mat-button routerLink="/" routerLinkActive="">
+      <mat-icon aria-hidden="false" aria-label="settings icon">settings</mat-icon>
+    </a>
 </mat-toolbar>

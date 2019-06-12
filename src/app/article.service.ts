@@ -41,14 +41,39 @@ export class ArticleService {
     return this.articlesUpdated.asObservable();
   }
 
-  getArticle(title: String) {
-    // this.http.get<{message: String, article: any}>('http://localhost:3000/api/articles/' + title)
-    // .subscribe((response) => {
-    //   console.log(response.article);
-    // });
+  getArticleById(id: string) {
+    console.log(id);
+    return this.http.get<{article: any}>('http://localhost:3000/api/articles/' + id);
+  }
 
-    const article: Article =  this.articles.find((item) => item.title === title);
-    article.content = this.addIdsH4s(article.content);
+  updateArticle(id: string, title: string, authorName: string, tags: String[], content: string) {
+    const article: Article = {
+      id: id,
+      authors: [
+        {
+          name: authorName,
+          level: 'guest'
+        }
+      ],
+      title: title,
+      content: content,
+      categories: tags
+    };
+    console.log(article);
+
+    this.http.put('http://localhost:3000/api/articles/' + id, article)
+      .subscribe((res) => {
+        console.log(res);
+        const updatedArticles = [...this.articles];
+        const oldIdx  = updatedArticles.findIndex(p => p.id === article.id);
+        updatedArticles[oldIdx] = article;
+        this.articles = updatedArticles;
+        this.articlesUpdated.next([...this.articles]);
+      });
+  }
+
+  getArticleByTitle(title: string) {
+    const article: Article =  {...this.articles.find((item) => item.title === title)};
     return article;
   }
 
@@ -85,8 +110,6 @@ export class ArticleService {
         this.articles = modifiedArticles;
         this.articlesUpdated.next([...this.articles]);
       });
-
-    // return [...this.articles];
   }
 
 }

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ArticleService } from '../article.service';
 
 
 @Component({
@@ -8,11 +7,5 @@ import { ArticleService } from '../article.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  searchId: string;
-
-  // constructor(public articleService: ArticleService) {}
-
-  // onSearch(id: String) {
-  //   this.articleService.getArticle(id);
-  // }
+  searchTitle: string;
 }
