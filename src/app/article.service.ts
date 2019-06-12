@@ -16,7 +16,7 @@ export class ArticleService {
   constructor(public router: Router,
               private http: HttpClient) {}
 
-  addArticle(title: string, author: string, tags: String[], content: string) {
+  addArticle(title: string, author: string, tags: string[], content: string) {
     const article: Article = {
       id: null,
       authors: [
@@ -46,7 +46,7 @@ export class ArticleService {
     return this.http.get<{article: any}>('http://localhost:3000/api/articles/' + id);
   }
 
-  updateArticle(id: string, title: string, authorName: string, tags: String[], content: string) {
+  updateArticle(id: string, title: string, authorName: string, tags: string[], content: string) {
     const article: Article = {
       id: id,
       authors: [
@@ -94,7 +94,7 @@ export class ArticleService {
   }
 
   getArticles() {
-    this.http.get<{message: String, articles: any}>('http://localhost:3000/api/articles')
+    this.http.get<{message: string, articles: any}>('http://localhost:3000/api/articles')
       .pipe(map((response) => {
         return response.articles.map(article => {
           return {

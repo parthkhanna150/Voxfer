@@ -1,5 +1,5 @@
 
-export const categories: String[] =  [
+export const categories: string[] =  [
   'Visual Arts' ,
   'Music',
   'Neuroscience',

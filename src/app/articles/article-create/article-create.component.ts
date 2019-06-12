@@ -24,9 +24,9 @@ export class ArticleCreateComponent implements OnInit {
   addOnBlur = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   categoryCtrl = new FormControl();
-  filteredCategories: Observable<String[]>;
-  categories: String[] = ['Chemistry'];
-  allCategories: String[] = categories;
+  filteredCategories: Observable<string[]>;
+  categories: string[] = ['Chemistry'];
+  allCategories: string[] = categories;
   public Editor = ClassicEditor;
   public model = {
     editorData: '<p>Hello, world!</p>'
@@ -92,7 +92,7 @@ export class ArticleCreateComponent implements OnInit {
     }
   }
 
-  remove(category: String): void {
+  remove(category: string): void {
     const index = this.categories.indexOf(category);
 
     if (index >= 0) {
@@ -106,7 +106,7 @@ export class ArticleCreateComponent implements OnInit {
     this.categoryCtrl.setValue(null);
   }
 
-  private _filter(value: string): String[] {
+  private _filter(value: string): string[] {
     const filterValue = value;
     return this.allCategories.filter(category => (category.toLowerCase()).indexOf(filterValue.toLowerCase()) === 0);
   }

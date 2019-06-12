@@ -42,7 +42,7 @@ export class ArticleDisplayComponent implements OnInit {
           };
           // console.log(this.article);
           this.article.content = this.articleService.addIdsH4s(this.article.content);
-          console.log(this.article.content);
+          // console.log(this.article.content);
           this.buildSideMenu(this.article.content);
         });
       });
