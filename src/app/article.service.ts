@@ -42,7 +42,7 @@ export class ArticleService {
   }
 
   getArticleById(id: string) {
-    console.log(id);
+    // console.log(id);
     return this.http.get<{article: any}>('http://localhost:3000/api/articles/' + id);
   }
 
@@ -59,7 +59,7 @@ export class ArticleService {
       content: content,
       categories: tags
     };
-    console.log(article);
+    // console.log(article);
 
     this.http.put('http://localhost:3000/api/articles/' + id, article)
       .subscribe((res) => {
