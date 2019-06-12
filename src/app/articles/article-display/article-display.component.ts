@@ -1,7 +1,7 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ArticleService } from 'src/app/article.service';
 import { Article } from 'src/app/models/article';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -27,10 +27,11 @@ export class ArticleDisplayComponent implements OnInit {
     public articleService: ArticleService) {}
 
     ngOnInit() {
-      this.id = this.route.snapshot.paramMap.get('id');
-      // console.log(this.id);
-      this.articleService.getArticleById(this.id)
-        .subscribe((response) => {
+      this.route.paramMap.subscribe((paramMap: ParamMap) => {
+          this.id = paramMap.get('id');
+          // console.log(this.id);
+          this.articleService.getArticleById(this.id)
+            .subscribe((response) => {
           // console.log(response);
           this.article = {
             id: response.article._id,
@@ -44,12 +45,17 @@ export class ArticleDisplayComponent implements OnInit {
           // console.log(this.article.content);
           this.buildSideMenu(this.article.content);
         });
+      });
     }
 
     buildSideMenu(content: string) {
       const doc = new DOMParser().parseFromString(content, 'text/html');
       const h4s = doc.getElementsByTagName('h4');
       const menuUl = document.querySelector('ul');
+      while (menuUl.firstChild) {
+        menuUl.removeChild(menuUl.firstChild);
+      }
+
       const arrH4 = Array.from(h4s);
 
       arrH4.forEach((h4, position) => {
