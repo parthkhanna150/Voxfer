@@ -82,9 +82,9 @@ export class ArticleService {
     let prev = 0;
     let newContent = '';
     for (let i = 0; i < content.length - 4; i++) {
-      if (content.substring(i, i + 4) === '<h4>') {
+      if (content.substring(i, i + 4) === '<h3>') {
         newContent += content.substring(prev, i);
-        newContent += '<h4 id="' + idx + '">';
+        newContent += '<h3 id="' + idx + '">';
         prev = i + 4;
         idx++;
       }

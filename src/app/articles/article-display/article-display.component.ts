@@ -42,7 +42,7 @@ export class ArticleDisplayComponent implements OnInit {
           };
           // console.log(this.article);
           this.article.content = this.articleService.addIdsH4s(this.article.content);
-          // console.log(this.article.content);
+          console.log(this.article.content);
           this.buildSideMenu(this.article.content);
         });
       });
@@ -50,19 +50,19 @@ export class ArticleDisplayComponent implements OnInit {
 
     buildSideMenu(content: string) {
       const doc = new DOMParser().parseFromString(content, 'text/html');
-      const h4s = doc.getElementsByTagName('h4');
+      const h3s = doc.getElementsByTagName('h3');
       const menuUl = document.querySelector('ul');
       while (menuUl.firstChild) {
         menuUl.removeChild(menuUl.firstChild);
       }
 
-      const arrH4 = Array.from(h4s);
+      const arrH3s = Array.from(h3s);
 
-      arrH4.forEach((h4, position) => {
+      arrH3s.forEach((h3, position) => {
         const menuLi = document.createElement('li');
         const menuA = document.createElement('a');
 
-        menuA.textContent = h4.textContent;
+        menuA.textContent = h3.textContent;
         menuA.setAttribute('href', 'display/' + this.article.id + '#' + position);
 
         menuLi.appendChild(menuA);
