@@ -63,7 +63,7 @@ export class ArticleDisplayComponent implements OnInit {
 
         menuA.textContent = h3.textContent;
         menuA.setAttribute('href', 'display/' + this.article.id + '#' + position);
-
+        menuA.setAttribute('style', 'text-decoration: none; color: black;');
         menuLi.appendChild(menuA);
         menuUl.appendChild(menuLi);
       });
