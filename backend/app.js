@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const Article = require('./model/article');
+
+const articlesRoutes = require('./routes/articles')
 
 const api_key = require('../app_env');
 
@@ -24,59 +25,6 @@ app.use((req,res,next) => {
   next();
 });
 
-// TODO: remove IDs from interface, OR they'll be OVERWRITTEN ???
-app.get('/api/articles',(req, res, next) => {
-  Article.find().then(documents => {
-    res.status(200).json({
-      message: 'Articles fetched successfully',
-      articles: documents
-    });
-  });
-});
-
-app.post('/api/articles/create', (req, res, next) => {
-  const article = new Article({
-    authors: req.body.authors,
-    title: req.body.title,
-    content: req.body.content,
-    categories: req.body.categories
-  });
-  article.save();
-  res.status(201).json({
-    message: 'Article added successfully!'
-  });
-});
-
-app.put('/api/articles/:id', (res, req, next) => {
-  // console.log(typeof req);
-  // var iterator = (Object.keys(req.req)).values();
-  // for (let elements of iterator) {
-  //   console.log(elements);
-  // }
-  const article = new Article({
-    _id: req.req.body.id,
-    authors: req.req.body.authors,
-    title: req.req.body.title,
-    content: req.req.body.content,
-    categories: req.req.body.categories
-  });
-  // console.log(article);
-  Article.updateOne({_id: req.req.params.id}, article)
-    .then(result => {
-      res.res.status(200).json({ message: "Update successful!" });
-    });
-});
-
-app.get("/api/articles/:id", (req, res, next) => {
-  Article.findById(req.params.id)
-    .then((article) => {
-      if(article){
-        // console.log(article);
-        res.status(200).json({article: article});
-      } else {
-        res.status(404).json({ message: 'Page not found!' });
-      }
-    });
-});
+app.use('/api/articles/', articlesRoutes);
 
 module.exports = app;

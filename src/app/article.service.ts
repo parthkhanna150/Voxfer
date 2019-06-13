@@ -29,7 +29,7 @@ export class ArticleService {
       content: content,
       categories: tags
     };
-    this.http.post<{message: string}>('http://localhost:3000/api/articles/create', article)
+    this.http.post<{message: string}>('http://localhost:3000/api/articles', article)
       .subscribe((response) => {
         console.log(response.message);
         this.articles.push(article);
