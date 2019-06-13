@@ -5,17 +5,21 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-article-list',
-  templateUrl: './article-list.component.html'
+  templateUrl: './article-list.component.html',
+  styleUrls: ['./article-list.component.css']
 })
 export class  ArticleListComponent implements OnInit, OnDestroy {
   articles: Article[] = [];
   private  articlesSub: Subscription;
   constructor(public articleService: ArticleService) {}
+  isLoading = false;
 
   ngOnInit() {
+    this.isLoading = true;
     this.articleService.getArticles();
     this.articlesSub = this.articleService.getArticleUpdateListener()
       .subscribe((articles: Article[]) => {
+        this.isLoading = false;
         this.articles = articles;
       });
   }

@@ -21,29 +21,28 @@ export class SafeHtmlPipe implements PipeTransform  {
 export class ArticleDisplayComponent implements OnInit {
   article: Article;
   id: string;
+  isLoading = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public articleService: ArticleService) {}
 
     ngOnInit() {
+      this.isLoading = true;
       this.route.paramMap.subscribe((paramMap: ParamMap) => {
           this.id = paramMap.get('id');
-          // console.log(this.id);
           this.articleService.getArticleById(this.id)
             .subscribe((response) => {
-          // console.log(response);
-          this.article = {
-            id: response.article._id,
-            title: response.article.title,
-            authors: response.article.authors,
-            content: response.article.content,
-            categories:  response.article.categories
-          };
-          // console.log(this.article);
-          this.article.content = this.articleService.addIdsH4s(this.article.content);
-          // console.log(this.article.content);
-          this.buildSideMenu(this.article.content);
+              this.article = {
+                id: response.article._id,
+                title: response.article.title,
+                authors: response.article.authors,
+                content: response.article.content,
+                categories:  response.article.categories
+              };
+              this.article.content = this.articleService.addIdsH4s(this.article.content);
+              this.buildSideMenu(this.article.content);
+              this.isLoading = false;
         });
       });
     }

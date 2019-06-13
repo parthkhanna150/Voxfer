@@ -1,5 +1,6 @@
 <div class=container>
-    <mat-card class="content-card">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <mat-card *ngIf="!isLoading" class="content-card">
         <mat-card-header>
             <a #edit [routerLink]="['/edit', id]">
               <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>

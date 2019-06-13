@@ -2,8 +2,8 @@
   <span><a routerLink="/">Research Wiki</a></span>
     <span class="spacer"></span>
     <div>
-        <input placeholder="Write here..." [(ngModel)]="searchTitle">
-        <button mat-button [routerLink]="['display', searchTitle]">Search</button>
+        <input placeholder="Write here..." [(ngModel)]="searchId">
+        <button mat-button [routerLink]="['display', searchId]">Search</button>
     </div>
     <span class="spacer"></span>
     <a mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>

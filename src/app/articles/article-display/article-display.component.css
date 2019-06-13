@@ -33,3 +33,7 @@ a {
 #edit {
   float: right;
 }
+
+mat-spinner {
+  margin: auto;
+}

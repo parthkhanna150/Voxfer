@@ -34,6 +34,7 @@ export class ArticleService {
         console.log(response.message);
         this.articles.push(article);
         this.articlesUpdated.next([...this.articles]);
+        this.router.navigate(['/']);
       });
   }
 
@@ -69,6 +70,7 @@ export class ArticleService {
         updatedArticles[oldIdx] = article;
         this.articles = updatedArticles;
         this.articlesUpdated.next([...this.articles]);
+        this.router.navigate(['/']);
       });
   }
 
@@ -111,5 +113,4 @@ export class ArticleService {
         this.articlesUpdated.next([...this.articles]);
       });
   }
-
 }

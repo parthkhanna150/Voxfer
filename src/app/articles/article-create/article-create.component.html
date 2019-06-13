@@ -1,5 +1,6 @@
 <div class="editContainer">
-  <form (submit)="onSaveArticle(articleForm)" class="container" #articleForm="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form *ngIf="!isLoading" (submit)="onSaveArticle(articleForm)" class="container" #articleForm="ngForm">
       <mat-form-field>
         <input matInput minlength="3" required [ngModel]="article?.title" name="title" placeholder="Title" #title="ngModel">
         <mat-error *ngIf="title.invalid">Please enter a valid title</mat-error>

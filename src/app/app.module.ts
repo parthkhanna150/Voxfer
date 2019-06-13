@@ -18,7 +18,8 @@ import {
   MatChipsModule,
   MatDividerModule,
   MatIconModule,
-  MatAutocompleteModule } from '@angular/material';
+  MatAutocompleteModule,
+  MatProgressSpinnerModule} from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { ArticleService } from './article.service';
@@ -48,7 +49,8 @@ import { ArticleService } from './article.service';
     MatIconModule,
     MatAutocompleteModule,
     CKEditorModule,
-    HttpClientModule
+    HttpClientModule,
+    MatProgressSpinnerModule
   ],
   providers: [ArticleService],
   bootstrap: [AppComponent]

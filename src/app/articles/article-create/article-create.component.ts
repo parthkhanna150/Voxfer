@@ -34,6 +34,7 @@ export class ArticleCreateComponent implements OnInit {
   private articleId = null;
   private mode = 'create';
   article: Article;
+  isLoading = false;
 
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -51,18 +52,20 @@ export class ArticleCreateComponent implements OnInit {
       if (paramMap.has('id')) {
         this.mode = 'edit';
         this.articleId = paramMap.get('id');
+        this.isLoading = true;
         this.articleService.getArticleById(this.articleId)
           .subscribe(articleData => {
-          this.article = {
-            id: articleData.article._id,
-            title: articleData.article.title,
-            authors: articleData.article.authors,
-            content: articleData.article.content,
-            categories:  articleData.article.categories
-          };
-          // console.log(this.article);
-          this.model.editorData = this.article.content;
-          this.categories = this.article.categories;
+            this.isLoading = false;
+            this.article = {
+              id: articleData.article._id,
+              title: articleData.article.title,
+              authors: articleData.article.authors,
+              content: articleData.article.content,
+              categories:  articleData.article.categories
+            };
+            // console.log(this.article);
+            this.model.editorData = this.article.content;
+            this.categories = this.article.categories;
         });
       } else {
         this.mode = 'create';
@@ -119,6 +122,7 @@ export class ArticleCreateComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     if (this.mode === 'create') {
       this.articleService.addArticle(form.value.title, form.value.author, this.categories, this.model.editorData);
     } else {

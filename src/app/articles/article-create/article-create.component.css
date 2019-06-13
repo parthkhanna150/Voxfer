@@ -17,3 +17,7 @@
 button {
   margin: 0.3rem;
 }
+
+mat-spinner {
+  margin: auto;
+}
