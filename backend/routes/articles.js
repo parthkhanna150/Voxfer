@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../model/article');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('',(req, res, next) => {
+router.get('', (req, res, next) => {
   Article.find().then(documents => {
     res.status(200).json({
       message: 'Articles fetched successfully',
@@ -11,7 +12,7 @@ router.get('',(req, res, next) => {
   });
 });
 
-router.post('', (req, res, next) => {
+router.post('', checkAuth, (req, res, next) => {
   const article = new Article({
     authors: req.body.authors,
     title: req.body.title,
@@ -24,7 +25,7 @@ router.post('', (req, res, next) => {
   });
 });
 
-router.put('/:id', (res, req, next) => {
+router.put('/:id', checkAuth, (res, req, next) => {
   // console.log(typeof req);
   // var iterator = (Object.keys(req.req)).values();
   // for (let elements of iterator) {
