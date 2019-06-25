@@ -5,12 +5,13 @@ import { ArticleListComponent } from './articles/article-list/article-list.compo
 import { ArticleDisplayComponent } from './articles/article-display/article-display.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '',   redirectTo: 'all', pathMatch: 'full' },
   { path: 'all' , component: ArticleListComponent},
-  { path: 'create', component: ArticleCreateComponent},
-  { path: 'edit/:id', component: ArticleCreateComponent},
+  { path: 'create', component: ArticleCreateComponent, canActivate: [AuthGuard]},
+  { path: 'edit/:id', component: ArticleCreateComponent, canActivate: [AuthGuard]},
   { path: 'display/:id', component: ArticleDisplayComponent},
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent}
@@ -18,6 +19,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }
