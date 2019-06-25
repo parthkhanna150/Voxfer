@@ -6,10 +6,11 @@
         <button mat-button [routerLink]="['display', searchId]">Search</button>
     </div>
     <span class="spacer"></span>
-    <a mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
-    <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
-    <a mat-button routerLink="/signup" routerLinkActive="mat-accent">Sign up</a>
+    <a *ngIf="userIsAuthenticated" mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
+    <a *ngIf="!userIsAuthenticated" mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+    <a *ngIf="!userIsAuthenticated" mat-button routerLink="/signup" routerLinkActive="mat-accent">Sign up</a>
     <!-- <a mat-button routerLink="/" routerLinkActive="">
       <mat-icon aria-hidden="false" aria-label="settings icon">settings</mat-icon>
     </a> -->
+    <button *ngIf="userIsAuthenticated" mat-button>Logout</button>
 </mat-toolbar>

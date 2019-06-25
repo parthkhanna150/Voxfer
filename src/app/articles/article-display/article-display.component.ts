@@ -1,9 +1,10 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform, OnDestroy } from '@angular/core';
 import { ArticleService } from 'src/app/article.service';
 import { Article } from 'src/app/models/article';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Pipe({ name: 'safeHtml'})
 export class SafeHtmlPipe implements PipeTransform  {
@@ -18,14 +19,17 @@ export class SafeHtmlPipe implements PipeTransform  {
   templateUrl: './article-display.component.html',
   styleUrls: ['./article-display.component.css']
 })
-export class ArticleDisplayComponent implements OnInit {
+export class ArticleDisplayComponent implements OnInit, OnDestroy {
   article: Article;
   id: string;
   isLoading = false;
+  private authStatusSubs: Subscription;
+  userIsAuthenticated = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public articleService: ArticleService) {}
+    public articleService: ArticleService,
+    private authService: AuthService) {}
 
     ngOnInit() {
       this.isLoading = true;
@@ -42,9 +46,19 @@ export class ArticleDisplayComponent implements OnInit {
               };
               this.article.content = this.articleService.addIdsH4s(this.article.content);
               this.buildSideMenu(this.article.content);
+
+              this.userIsAuthenticated = this.authService.getIsAuth();
+              this.authStatusSubs = this.authService.getAuthStatusListener()
+                .subscribe(isAuthenticated => {
+                  this.userIsAuthenticated = isAuthenticated;
+                });
               this.isLoading = false;
         });
       });
+    }
+
+    ngOnDestroy() {
+      this.authStatusSubs.unsubscribe();
     }
 
     buildSideMenu(content: string) {
