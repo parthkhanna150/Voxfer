@@ -12,5 +12,5 @@
     <!-- <a mat-button routerLink="/" routerLinkActive="">
       <mat-icon aria-hidden="false" aria-label="settings icon">settings</mat-icon>
     </a> -->
-    <button *ngIf="userIsAuthenticated" mat-button>Logout</button>
+    <button *ngIf="userIsAuthenticated" mat-button (click)="onLogout()">Logout</button>
 </mat-toolbar>
