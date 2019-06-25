@@ -23,6 +23,8 @@ import {
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { ArticleService } from './article.service';
+import { SignupComponent } from './auth/signup/signup.component';
+import { LoginComponent } from './auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { ArticleService } from './article.service';
     HeaderComponent,
     ArticleListComponent,
     ArticleDisplayComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SignupComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
