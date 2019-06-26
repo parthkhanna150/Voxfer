@@ -4,11 +4,11 @@ const Article = require('../model/article');
 const checkAuth = require('../middleware/check-auth');
 
 router.get('', (req, res, next) => {
-  Article.find().then(documents => {
-    res.status(200).json({
-      message: 'Articles fetched successfully',
-      articles: documents
-    });
+  console.log(req.query.title);
+  Article.find({title: { $regex: req.query.title, "$options": "i" }})
+    .then(documents => {
+    console.log(documents);
+    res.status(200).send(documents);
   });
 });
 

@@ -11,6 +11,8 @@ import { post } from 'selenium-webdriver/http';
 })
 export class ArticleService {
   articles: Article[] = [];
+  searchResults: Article[];
+
   private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router,
@@ -112,10 +114,21 @@ export class ArticleService {
       });
   }
 
-  // searchArticles(title: string): Observable<Article[]> {
-  //   if (!title.trim) {
-  //     return of([]);
-  //   }
-  //   return this.http.get<Article[]>('http://localhost:3000/api/articles/?name=' + title);
-  // }
+  searchArticles(title: string) {
+    if (!title.trim) {
+      return of([]);
+    }
+    return this.http.get<any[]>('http://localhost:3000/api/articles/?title=' + title)
+    .pipe(map(response => {
+      return response.map(article => {
+        return {
+          id: article._id,
+          title: article.title,
+          content: article.content,
+          creator: article.creator,
+          categories: article.categories
+          };
+      });
+    }));
+  }
 }

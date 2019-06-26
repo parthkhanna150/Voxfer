@@ -1,0 +1,13 @@
+<div id="search-component">
+    <mat-form-field>
+        <input matInput placeholder="Search Article..." #searchBox (input)="onSearch(searchBox.value)" />
+      </mat-form-field>
+
+    <ul class="search-result">
+      <li *ngFor="let article of response$ | async">
+        <a [routerLink]="['/display', article.id]">
+          {{article.title}}
+        </a>
+      </li>
+    </ul>
+  </div>
