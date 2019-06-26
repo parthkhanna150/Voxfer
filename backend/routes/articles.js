@@ -54,4 +54,15 @@ router.get("/:id", (req, res, next) => {
     });
 });
 
+router.delete(':/id', checkAuth, (req, res, next) => {
+  Article.deleteOne({_id: req.params.id, creator: req.userData.userId})
+    .then(result => {
+      if (result.n > 0) {
+        res.res.status(200).json({ message: "Deletion successful!" });
+      } else {
+        res.res.status(401).json({ message: "Not Authorized!" });
+      }
+    });
+});
+
 module.exports = router;
