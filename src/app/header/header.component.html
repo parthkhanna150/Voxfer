@@ -1,11 +1,11 @@
 <mat-toolbar class="mat-elevation-z4" color="primary">
   <span><a routerLink="/">Research Wiki</a></span>
     <span class="spacer"></span>
-    <div>
+    <!-- <div>
         <input placeholder="Write here..." [(ngModel)]="searchId">
         <button mat-button [routerLink]="['display', searchId]">Search</button>
     </div>
-    <span class="spacer"></span>
+    <span class="spacer"></span> -->
     <a *ngIf="userIsAuthenticated" mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/signup" routerLinkActive="mat-accent">Sign up</a>

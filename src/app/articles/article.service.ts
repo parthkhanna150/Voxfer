@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Article } from '../models/article';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { post } from 'selenium-webdriver/http';
 
 @Injectable({
@@ -111,4 +111,11 @@ export class ArticleService {
         this.router.navigate(['/']);
       });
   }
+
+  // searchArticles(title: string): Observable<Article[]> {
+  //   if (!title.trim) {
+  //     return of([]);
+  //   }
+  //   return this.http.get<Article[]>('http://localhost:3000/api/articles/?name=' + title);
+  // }
 }

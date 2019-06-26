@@ -25,6 +25,8 @@ import { ArticleListComponent } from './articles/article-list/article-list.compo
 import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { ArticleSearchComponent } from './articles/article-search/article-search.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     ArticleDisplayComponent,
     SafeHtmlPipe,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    ArticleSearchComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
