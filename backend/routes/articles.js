@@ -30,7 +30,8 @@ router.put("/:id", checkAuth, (res, req, next) => {
     _id: req.req.body.id,
     title: req.req.body.title,
     content: req.req.body.content,
-    categories: req.req.body.categories
+    categories: req.req.body.categories,
+    creator: req.req.userData.userId
   });
   Article.updateOne({_id: req.req.params.id, creator: req.req.userData.userId}, article)
     .then(result => {

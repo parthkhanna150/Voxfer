@@ -60,9 +60,9 @@ export class ArticleCreateComponent implements OnInit {
               id: articleData.article._id,
               title: articleData.article.title,
               content: articleData.article.content,
-              categories:  articleData.article.categories
+              categories:  articleData.article.categories,
+              creator: articleData.article.creator
             };
-            // console.log(this.article);
             this.model.editorData = this.article.content;
             this.categories = this.article.categories;
         });

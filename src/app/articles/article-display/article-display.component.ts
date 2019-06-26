@@ -20,6 +20,7 @@ export class SafeHtmlPipe implements PipeTransform  {
   styleUrls: ['./article-display.component.css']
 })
 export class ArticleDisplayComponent implements OnInit, OnDestroy {
+  userId: string;
   article: Article;
   id: string;
   isLoading = false;
@@ -33,6 +34,7 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
       this.isLoading = true;
+      this.userId = this.authService.getUserId();
       this.route.paramMap.subscribe((paramMap: ParamMap) => {
           this.id = paramMap.get('id');
           this.articleService.getArticleById(this.id)
@@ -41,7 +43,8 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
                 id: response.article._id,
                 title: response.article.title,
                 content: response.article.content,
-                categories:  response.article.categories
+                categories:  response.article.categories,
+                creator: response.article.creator
               };
               this.article.content = this.articleService.addIdsH4s(this.article.content);
               this.buildSideMenu(this.article.content);
@@ -50,6 +53,7 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
               this.authStatusSubs = this.authService.getAuthStatusListener()
                 .subscribe(isAuthenticated => {
                   this.userIsAuthenticated = isAuthenticated;
+                  this.userId  = this.authService.getUserId();
                 });
               this.isLoading = false;
         });

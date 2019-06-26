@@ -3,4 +3,5 @@ export class Article {
   title: string;
   content: string;
   categories:  string[];
+  creator: string;
 }

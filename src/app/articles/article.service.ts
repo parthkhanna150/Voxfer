@@ -21,7 +21,8 @@ export class ArticleService {
       id: null,
       title: title,
       content: content,
-      categories: tags
+      categories: tags,
+      creator: null
     };
     this.http.post<{message: string}>('http://localhost:3000/api/articles', article)
       .subscribe((response) => {
@@ -45,9 +46,9 @@ export class ArticleService {
       id: id,
       title: title,
       content: content,
-      categories: tags
+      categories: tags,
+      creator: null
     };
-    // console.log(article);
 
     this.http.put('http://localhost:3000/api/articles/' + id, article)
       .subscribe((res) => {
