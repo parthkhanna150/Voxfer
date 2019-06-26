@@ -100,4 +100,14 @@ export class ArticleService {
         this.articlesUpdated.next([...this.articles]);
       });
   }
+
+  deleteArticle(id: string) {
+    this.http.delete('http://localhost:3000/api/articles/' + id)
+      .subscribe(() => {
+        console.log('deleted!');
+        this.articles = this.articles.filter(article => article.id !== id);
+        this.articlesUpdated.next([...this.articles]);
+        this.router.navigate(['/']);
+      });
+  }
 }

@@ -81,4 +81,8 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
         menuUl.appendChild(menuLi);
       });
     }
+
+    onDelete(id: string) {
+      this.articleService.deleteArticle(id);
+    }
 }
