@@ -1,4 +1,3 @@
-
 export const categories: string[] =  [
   'Visual Arts' ,
   'Music',

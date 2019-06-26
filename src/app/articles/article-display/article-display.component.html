@@ -6,7 +6,6 @@
               <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
             </a>
             <mat-card-title>{{article?.title}}</mat-card-title>
-            <mat-card-subtitle *ngFor="let author of article?.authors">{{author.name}}</mat-card-subtitle>
         </mat-card-header>
       <div>
           <mat-chip-list *ngFor="let category of article?.categories" aria-label="categories">

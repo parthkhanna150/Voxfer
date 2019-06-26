@@ -1,5 +1,5 @@
 import { Component, OnInit, Pipe, PipeTransform, OnDestroy } from '@angular/core';
-import { ArticleService } from 'src/app/article.service';
+import { ArticleService } from 'src/app/articles/article.service';
 import { Article } from 'src/app/models/article';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -40,7 +40,6 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
               this.article = {
                 id: response.article._id,
                 title: response.article.title,
-                authors: response.article.authors,
                 content: response.article.content,
                 categories:  response.article.categories
               };

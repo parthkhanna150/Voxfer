@@ -14,7 +14,6 @@ router.get('', (req, res, next) => {
 
 router.post('', checkAuth, (req, res, next) => {
   const article = new Article({
-    authors: req.body.authors,
     title: req.body.title,
     content: req.body.content,
     categories: req.body.categories
@@ -26,19 +25,12 @@ router.post('', checkAuth, (req, res, next) => {
 });
 
 router.put('/:id', checkAuth, (res, req, next) => {
-  // console.log(typeof req);
-  // var iterator = (Object.keys(req.req)).values();
-  // for (let elements of iterator) {
-  //   console.log(elements);
-  // }
   const article = new Article({
     _id: req.req.body.id,
-    authors: req.req.body.authors,
     title: req.req.body.title,
     content: req.req.body.content,
     categories: req.req.body.categories
   });
-  // console.log(article);
   Article.updateOne({_id: req.req.params.id}, article)
     .then(result => {
       res.res.status(200).json({ message: "Update successful!" });

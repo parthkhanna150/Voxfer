@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Article } from './models/article';
-import { articles } from './models/mock-articles';
+import { Article } from '../models/article';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -10,21 +9,15 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ArticleService {
-  articles: Article[] = articles;
+  articles: Article[] = [];
   private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router,
               private http: HttpClient) {}
 
-  addArticle(title: string, author: string, tags: string[], content: string) {
+  addArticle(title: string, tags: string[], content: string) {
     const article: Article = {
       id: null,
-      authors: [
-        {
-          name: author,
-          level: 'guest'
-        }
-      ],
       title: title,
       content: content,
       categories: tags
@@ -43,19 +36,12 @@ export class ArticleService {
   }
 
   getArticleById(id: string) {
-    // console.log(id);
     return this.http.get<{article: any}>('http://localhost:3000/api/articles/' + id);
   }
 
-  updateArticle(id: string, title: string, authorName: string, tags: string[], content: string) {
+  updateArticle(id: string, title: string, tags: string[], content: string) {
     const article: Article = {
       id: id,
-      authors: [
-        {
-          name: authorName,
-          level: 'guest'
-        }
-      ],
       title: title,
       content: content,
       categories: tags
@@ -101,7 +87,6 @@ export class ArticleService {
         return response.articles.map(article => {
           return {
             id: article._id,
-            authors: article.authors,
             title: article.title,
             content: article.content,
             categories: article.categories

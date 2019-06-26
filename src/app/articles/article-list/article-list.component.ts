@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ArticleService } from 'src/app/article.service';
+import { ArticleService } from 'src/app/articles/article.service';
 import { Article } from 'src/app/models/article';
 import { Subscription } from 'rxjs';
 
@@ -11,8 +11,9 @@ import { Subscription } from 'rxjs';
 export class  ArticleListComponent implements OnInit, OnDestroy {
   articles: Article[] = [];
   private  articlesSub: Subscription;
-  constructor(public articleService: ArticleService) {}
   isLoading = false;
+
+  constructor(public articleService: ArticleService) {}
 
   ngOnInit() {
     this.isLoading = true;

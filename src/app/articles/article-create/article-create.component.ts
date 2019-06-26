@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import {Location} from '@angular/common';
-import { ArticleService } from 'src/app/article.service';
+import { ArticleService } from 'src/app/articles/article.service';
 import { MatChipInputEvent } from '@angular/material';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, NgForm} from '@angular/forms';
@@ -59,7 +59,6 @@ export class ArticleCreateComponent implements OnInit {
             this.article = {
               id: articleData.article._id,
               title: articleData.article.title,
-              authors: articleData.article.authors,
               content: articleData.article.content,
               categories:  articleData.article.categories
             };
@@ -124,9 +123,9 @@ export class ArticleCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.articleService.addArticle(form.value.title, form.value.author, this.categories, this.model.editorData);
+      this.articleService.addArticle(form.value.title, this.categories, this.model.editorData);
     } else {
-      this.articleService.updateArticle(this.articleId, form.value.title, form.value.author, this.categories, this.model.editorData);
+      this.articleService.updateArticle(this.articleId, form.value.title, this.categories, this.model.editorData);
     }
     form.resetForm();
   }
