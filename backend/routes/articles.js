@@ -16,6 +16,7 @@ router.post('', checkAuth, (req, res, next) => {
   const article = new Article({
     title: req.body.title,
     content: req.body.content,
+    creator: req.userData.userId,
     categories: req.body.categories
   });
   article.save();
@@ -31,15 +32,19 @@ router.put('/:id', checkAuth, (res, req, next) => {
     content: req.req.body.content,
     categories: req.req.body.categories
   });
-  Article.updateOne({_id: req.req.params.id}, article)
+  Article.updateOne({_id: req.req.params.id, creator: req.req.userData.userId}, article)
     .then(result => {
-      res.res.status(200).json({ message: "Update successful!" });
+      if (result.nModified > 0) {
+        res.res.status(200).json({ message: "Update successful!" });
+      } else {
+        res.res.status(401).json({ message: "Not Authorized!" });
+      }
     });
 });
 
 router.get("/:id", (req, res, next) => {
   Article.findById(req.params.id)
-    .then((article) => {
+    .then(article => {
       if(article){
         // console.log(article);
         res.status(200).json({article: article});

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { post } from 'selenium-webdriver/http';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,7 @@ export class ArticleService {
             id: article._id,
             title: article.title,
             content: article.content,
+            creator: article.creator,
             categories: article.categories
             };
         });
