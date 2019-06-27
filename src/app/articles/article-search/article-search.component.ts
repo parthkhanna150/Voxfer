@@ -33,12 +33,4 @@ export class ArticleSearchComponent implements OnInit {
   onSearch(title: string): void {
     this.searchTerms.next(title);
   }
-
-  // onSearch(title: string) {
-  //   this.articleService.searchArticles(title)
-  //     .subscribe(response => {
-  //       this.articles = response.articles;
-  //       console.log(response);
-  //     });
-  // }
 }

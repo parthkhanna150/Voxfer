@@ -1,0 +1,12 @@
+<div class="main-div">
+    <mat-card>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+        <form (submit)="onForget(forgetForm)" #forgetForm="ngForm" *ngIf="!isLoading">
+          <mat-form-field>
+            <input matInput type="email" placeholder="User Email" name="email" ngModel #emailInput="ngModel" required email>
+            <mat-error *ngIf="emailInput.invalid">Please enter a valid email</mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Forgot Password</button>
+        </form>
+      </mat-card>
+</div>

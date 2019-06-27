@@ -1,4 +1,5 @@
 const express = require('express');
+const { promisify } = require('util');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -6,39 +7,10 @@ const nodemailer = require('nodemailer');
 
 const User = require('../model/User');
 
-router.post('/forgot', (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-
-  const errors = req.validationErrors();
-
-  if (errors) {
-    req.flash('errors', errors);
-    console.log('errors', errors);
-    return res.redirect('/forgot');
-  }
-
-  const createRandomToken = randomBytesAsync(16)
-    .then(buf => buf.toString('hex'));
-
-  const setRandomToken = token =>
-    User
-      .findOne({ email: req.body.email })
-      .then((user) => {
-        if (!user) {
-          req.flash('errors', { msg: 'Account with that email address does not exist.' });
-          console.log('Email don\'t exist.');
-        } else {
-          user.passwordResetToken = token;
-          user.passwordResetExpires = Date.now() + 3600000; // 1 hour
-          user = user.save();
-        }
-        return user;
-      });
-
-  const sendForgotPasswordEmail = (user) => {
+//const randomBytesAsync = promisify(crypto.randomBytes);
+router.post('/signup', (req, res, next) => {
+  const sendSignupEmail = (user) => {
     if (!user) { return; }
-    const token = user.passwordResetToken;
     let transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
@@ -47,60 +19,63 @@ router.post('/forgot', (req, res, next) => {
       }
     });
     const mailOptions = {
-      to: user.email,
+      to: 'shaurya12345678@gmail.com',
       from: process.env.EMAIL_USER,
-      subject: 'Reset your password on Research Wiki',
-      text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-        Please click on the following link, or paste this into your browser to complete the process:\n\n
-        http://${req.headers.host}/reset/${token}\n\n
+      subject: 'Approve User',
+      text: `A new user has joined the website!\n\n
+        Please click on the following link, or paste this into your browser to complete the account activation process:\n\n
+        http://${process.env.FRONTEND_URI}/activate/${user._id}\n\n
         If you did not request this, please ignore this email and your password will remain unchanged.\n`
     };
     return transporter.sendMail(mailOptions)
       .then(() => {
-        req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+        console.log('info', `An e-mail has been sent to ${user.email} with further instructions.`);
       })
       .catch((err) => {
-        console.log('ERROR: Could not send forgot password email.\n', err);
-        req.flash('errors', { msg: 'Error sending the password reset message. Please try again shortly.' });
-        return err;
+        console.log('ERROR: Could not send activation email.\n', err);
+        console.log('errors', 'Error sending the password reset message. Please try again shortly.');
+        return res.status(500).json({ error: "COuld not send activation email." });
       });
   };
 
-  createRandomToken
-    .then(setRandomToken)
-    .then(sendForgotPasswordEmail)
-    .then(() => res.redirect('/forgot'))
-    .catch(next);
-});
-
-
-
-router.post('/signup', (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-        active: false
+  User.findOne({ email: req.body.email }, (err, existingUser) => {
+    if (err) { return next(err); }
+    if (existingUser) {
+      console.log('Email already exists.');
+      return res.status(500).json({
+        error: 'Account with that email address already exists. Redirecting to Signup...'
       });
-      user.save()
-        .then(result => {
-          res.status(201).json({
-            message: 'User created!',
-            result: result
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          res.status(500).json({
-            error: err
-          });
+    }
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      active: false
+    });
+
+    user.save((err, newUser) => {
+      if (err) {
+        console.log('error', err);
+        return res.status(500).json({
+          error: err
         });
+      }
+      console.log('Sucessfully registered');
+      sendSignupEmail(newUser).then(() => {
+        delete newUser.password;
+        res.status(201).json({
+          message: 'User created!',
+          result: newUser
+        });
+      });
+    });
   });
 });
 
+router.get('/activate/:userId', (req, res, next) => {
+  
+});
+
 router.post('/login', (req, res, next) => {
-  // console.log(req.body.password, req.body.email);
   let fetchedUser;
   User.findOne({ email: req.body.email })
     .then(user => {
@@ -119,10 +94,10 @@ router.post('/login', (req, res, next) => {
         });
       }
       const token = jwt.sign(
-        {email: fetchedUser.email, userId: fetchedUser._id},
-        'THIS_is_THE_secret_should_BE_lonGeR',
-        {expiresIn: '1h'}
-        );
+        { email: fetchedUser.email, userId: fetchedUser._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
       res.status(200).json({
         token: token,
         expiresIn: 3600,
@@ -133,6 +108,14 @@ router.post('/login', (req, res, next) => {
       return res.status(401).json({
         message: 'Auth failed'
       });
+    });
+});
+
+router.post('/reset', (req, res, next) => {
+  // this will send an email to this user with a link
+  console.log(req.body.email);
+  res.status(201).json({
+    message: 'Reset!'
   });
 });
 

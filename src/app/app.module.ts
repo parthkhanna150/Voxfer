@@ -27,6 +27,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { ArticleSearchComponent } from './articles/article-search/article-search.component';
 import { HomeComponent } from './home/home.component';
+import { ForgetComponent } from './auth/forget/forget.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { HomeComponent } from './home/home.component';
     SignupComponent,
     LoginComponent,
     ArticleSearchComponent,
-    HomeComponent
+    HomeComponent,
+    ForgetComponent
   ],
   imports: [
     BrowserModule,

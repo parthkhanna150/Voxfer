@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const app = express();
 
 const articlesRoutes = require('./routes/articles')
@@ -19,8 +20,10 @@ mongoose.connect("mongodb+srv://Parth:"+api_key+"@cluster0-cneed.mongodb.net/tes
     console.log('connection failed');
   });
 
+// Load Environment Variables into process.env from a custom .env file
+dotenv.config({path: __dirname + '/.env'});
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req,res,next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
