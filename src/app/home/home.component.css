@@ -1,3 +1,11 @@
-div.title {
+#home-visualisation {
+  height: 400px;
+  margin-bottom: 3rem;
+}
+
+div {
+  height: 100vh;
+  background-color: white;
+  padding: 2rem;
   text-align: center;
 }
