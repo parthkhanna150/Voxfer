@@ -110,7 +110,7 @@ export class ArticleService {
   }
 
   searchArticles(title: string) {
-    if (!title.trim) {
+    if (title.length < 3) {
       return of([]);
     }
     return this.http.get<any[]>('http://localhost:3000/api/articles/?title=' + title)

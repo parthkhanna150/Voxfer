@@ -19,7 +19,8 @@ import {
   MatDividerModule,
   MatIconModule,
   MatAutocompleteModule,
-  MatProgressSpinnerModule} from '@angular/material';
+  MatProgressSpinnerModule,
+  MatOptionModule} from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -60,7 +61,8 @@ import { ForgetComponent } from './auth/forget/forget.component';
     MatAutocompleteModule,
     CKEditorModule,
     HttpClientModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatOptionModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
