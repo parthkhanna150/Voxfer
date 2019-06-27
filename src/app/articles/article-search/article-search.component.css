@@ -1,33 +1,12 @@
-.search-result {
-  width: 70%;
-  margin: auto;
+mat-option{
+  padding: 0;
 }
 
-.search-result li {
-  border: 1px solid gray;
-  background-color: white;
-  cursor: pointer;
-  padding: 7px;
-  list-style-type: none;
+::ng-deep .cdk-overlay-pane {
+    min-width:450px;
 }
 
-.search-result li:hover {
-  background-color: #607D8B;
-}
-
-.search-result li a {
-  display: block;
-  text-decoration: none;
-}
-
-.search-result li:hover a {
-  color: white;
-}
-
-.search-result li a:active {
-  color: white;
-}
-
-#search-box {
-  width: 50%;
+#option-button {
+  width: 100%;
+  height: 100%;
 }

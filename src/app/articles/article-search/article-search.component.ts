@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { Article } from 'src/app/models/article';
 import { ArticleService } from '../article.service';
 import {
   debounceTime, distinctUntilChanged, switchMap
 } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-article-search',
@@ -13,24 +14,28 @@ import {
 })
 export class ArticleSearchComponent implements OnInit {
   response$: Observable<Article[]>;
-  private searchTerms = new Subject<string>();
+  public autoCompleteControl = new FormControl();
 
   constructor(private articleService: ArticleService) {}
 
-  ngOnInit(): void {
-    this.response$ = this.searchTerms.pipe(
-      // wait 300ms after each keystroke before considering the term
-      debounceTime(500),
+  ngOnInit() {
+    this.response$ = this.autoCompleteControl.valueChanges.pipe(
+      // delay emits
+      debounceTime(300),
+      // use switch map so as to cancel previous subscribed events, before creating new once
+      switchMap(value => {
+        if (value !== '') {
+          // lookup from github
+          return this.lookup(value);
+        } else {
+          // if no value is present, return null
+          return of([]);
+        }
+      })
+      );
+    }
 
-      // ignore new term if same as previous term
-      distinctUntilChanged(),
-
-      // switch to new search observable each time the term changes
-      switchMap((title: string) => this.articleService.searchArticles(title)),
-    );
-  }
-
-  onSearch(title: string): void {
-    this.searchTerms.next(title);
-  }
+    lookup(value: string): Observable<Article[]> {
+      return this.articleService.searchArticles(value.toLowerCase());
+    }
 }
