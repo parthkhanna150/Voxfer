@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Article = require('../model/article');
+const Article = require('../model/Article');
 const checkAuth = require('../middleware/check-auth');
 
 router.get('', (req, res, next) => {
