@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Article } from '../models/article';
 import { Router } from '@angular/router';
-import { Subject, Observable, of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-import { post } from 'selenium-webdriver/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,6 @@ import { post } from 'selenium-webdriver/http';
 export class ArticleService {
   articles: Article[] = [];
   searchResults: Article[];
-
   private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router,
@@ -26,12 +24,11 @@ export class ArticleService {
       categories: tags,
       creator: null
     };
-    this.http.post<{message: string}>('http://localhost:3000/api/articles', article)
+    this.http.post<{message: string, article: any}>('http://localhost:3000/api/articles', article)
       .subscribe((response) => {
-        console.log(response.message);
         this.articles.push(article);
         this.articlesUpdated.next([...this.articles]);
-        this.router.navigate(['/']);
+        this.router.navigate(['display', response.article._id]);
       });
   }
 
@@ -54,13 +51,12 @@ export class ArticleService {
 
     this.http.put('http://localhost:3000/api/articles/' + id, article)
       .subscribe((res) => {
-        console.log(res);
         const updatedArticles = [...this.articles];
         const oldIdx  = updatedArticles.findIndex(p => p.id === article.id);
         updatedArticles[oldIdx] = article;
         this.articles = updatedArticles;
         this.articlesUpdated.next([...this.articles]);
-        this.router.navigate(['/']);
+        this.router.navigate(['display', article.id]);
       });
   }
 
@@ -107,7 +103,6 @@ export class ArticleService {
   deleteArticle(id: string) {
     this.http.delete('http://localhost:3000/api/articles/' + id)
       .subscribe(() => {
-        console.log('deleted!');
         this.articles = this.articles.filter(article => article.id !== id);
         this.articlesUpdated.next([...this.articles]);
         this.router.navigate(['/']);

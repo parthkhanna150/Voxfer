@@ -4,24 +4,26 @@ const Article = require('../model/article');
 const checkAuth = require('../middleware/check-auth');
 
 router.get('', (req, res, next) => {
-  console.log(req.query.title);
   Article.find({title: { $regex: req.query.title, "$options": "i" }})
     .then(documents => {
-    console.log(documents);
     res.status(200).send(documents);
   });
 });
 
 router.post('', checkAuth, (req, res, next) => {
+  let savedArticle;
   const article = new Article({
     title: req.body.title,
     content: req.body.content,
     creator: req.userData.userId,
     categories: req.body.categories
   });
-  article.save();
-  res.status(201).json({
-    message: 'Article added successfully!'
+  article.save().then(article => {
+    savedArticle = article;
+    res.status(201).json({
+      message: 'Article added successfully!',
+      article: savedArticle
+    });
   });
 });
 

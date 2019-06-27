@@ -20,7 +20,7 @@ export class ArticleSearchComponent implements OnInit {
   ngOnInit(): void {
     this.response$ = this.searchTerms.pipe(
       // wait 300ms after each keystroke before considering the term
-      debounceTime(300),
+      debounceTime(500),
 
       // ignore new term if same as previous term
       distinctUntilChanged(),
