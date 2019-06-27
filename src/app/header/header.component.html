@@ -4,8 +4,9 @@
     <!-- <div>
         <input placeholder="Write here..." [(ngModel)]="searchId">
         <button mat-button [routerLink]="['display', searchId]">Search</button>
-    </div>
-    <span class="spacer"></span> -->
+    </div> -->
+    <app-article-search *ngIf=""></app-article-search>
+    <span class="spacer"></span>
     <a *ngIf="userIsAuthenticated" mat-button routerLink="/create" routerLinkActive="mat-accent">Create</a>
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/signup" routerLinkActive="mat-accent">Sign up</a>

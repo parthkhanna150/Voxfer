@@ -1,7 +1,7 @@
 <div id="search-component">
-    <mat-form-field>
+    <mat-form-field id="search-box">
         <input matInput placeholder="Search Article..." #searchBox (input)="onSearch(searchBox.value)" />
-      </mat-form-field>
+    </mat-form-field>
 
     <ul class="search-result">
       <li *ngFor="let article of response$ | async">
