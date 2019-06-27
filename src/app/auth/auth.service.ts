@@ -80,6 +80,14 @@ export class AuthService {
     }
   }
 
+  forgetPassword(email: string) {
+    this.http.post('http://localhost:3000/api/user/reset', { email: email })
+      .subscribe((response) => {
+        console.log(response);
+        this.router.navigate(['/login']);
+      });
+  }
+
   createUser(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
     this.http.post('http://localhost:3000/api/user/signup', authData)

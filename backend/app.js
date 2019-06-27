@@ -17,7 +17,7 @@ mongoose.connect("mongodb+srv://Parth:"+api_key+"@cluster0-cneed.mongodb.net/tes
   });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req,res,next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

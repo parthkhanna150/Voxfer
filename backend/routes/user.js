@@ -6,8 +6,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 
 router.post('/signup', (req, res, next) => {
-  // console.log(req.body.password, req.body.email);
-
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
@@ -33,7 +31,6 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  // console.log(req.body.password, req.body.email);
   let fetchedUser;
   User.findOne({ email: req.body.email })
     .then(user => {
@@ -66,6 +63,14 @@ router.post('/login', (req, res, next) => {
       return res.status(401).json({
         message: 'Auth failed'
       });
+  });
+});
+
+router.post('/reset', (req, res, next) => {
+  // this will send an email to this user with a link
+  console.log(req.body.email);
+  res.status(201).json({
+    message: 'Reset!'
   });
 });
 
