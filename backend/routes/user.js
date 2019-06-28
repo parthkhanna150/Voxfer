@@ -32,7 +32,7 @@ router.post('/signup', (req, res, next) => {
     if (existingUser) {
       console.log('Email already exists.');
       return res.status(500).json({
-        error: 'Account with that email address already exists. Redirecting to Signup...'
+        error: 'Account with that email address already exists.'
       });
     }
     const user = new User({
@@ -86,7 +86,7 @@ router.get('/activate/:userId', (req, res, next) => {
         return res.status(201).json({ message: 'User has been activated!' });
       });
     })
-  })
+  }).then(err => { return res.status(500).json('Could not activate user!'); });
 });
 
 router.post('/login', (req, res, next) => {
@@ -94,25 +94,21 @@ router.post('/login', (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
+        throw('Could not find user!');
       }
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
+        throw('Incorrect username or password.');
       }
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
       );
-      res.status(200).json({
+      return res.status(200).json({
         token: token,
         expiresIn: 3600,
         userId: fetchedUser._id
@@ -120,7 +116,7 @@ router.post('/login', (req, res, next) => {
     })
     .catch(err => {
       return res.status(401).json({
-        message: 'Auth failed'
+        message: err
       });
     });
 });
