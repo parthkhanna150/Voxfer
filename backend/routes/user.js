@@ -34,7 +34,7 @@ router.post('/signup', (req, res, next) => {
             jwt.sign(
               {_id: fetchedUser._id},
               'THIS_is_THE_secret_should_BE_lonGeR',
-              {expiresIn: '1d'},
+              {expiresIn: '14d'},
               (err, emailToken) => {
                 const url = `http://localhost:3000/api/user/confirmation/${emailToken}`;
 
