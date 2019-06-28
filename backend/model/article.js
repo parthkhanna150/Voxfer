@@ -8,4 +8,3 @@ const articleSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Article', articleSchema);
-// collection name would be articles: lowercase(modelName)+'s'
