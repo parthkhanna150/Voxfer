@@ -1,23 +1,24 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import {Location} from '@angular/common';
 import { ArticleService } from 'src/app/articles/article.service';
 import { MatChipInputEvent } from '@angular/material';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, NgForm} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {Observable} from 'rxjs';
+import {Observable, Subscribable, Subscription} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categories } from 'src/app/models/mock-categories';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Article } from 'src/app/models/article';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-article-create',
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.css']
 })
-export class ArticleCreateComponent implements OnInit {
+export class ArticleCreateComponent implements OnInit, OnDestroy {
   visible = true;
   selectable = true;
   removable = true;
@@ -35,19 +36,26 @@ export class ArticleCreateComponent implements OnInit {
   private mode = 'create';
   article: Article;
   isLoading = false;
+  private authStatusSubs: Subscription;
 
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(private location: Location,
               public articleService: ArticleService,
-              public route: ActivatedRoute) {
+              public route: ActivatedRoute,
+              private authService: AuthService) {
     this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
         startWith(null),
         map((category: string | null) => category ? this._filter(category) : this.allCategories.slice()));
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.authStatusSubs = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('id')) {
         this.mode = 'edit';
@@ -130,5 +138,9 @@ export class ArticleCreateComponent implements OnInit {
       this.articleService.updateArticle(this.articleId, form.value.title, this.categories, this.model.editorData);
     }
     form.resetForm();
+  }
+
+  ngOnDestroy() {
+    this.authStatusSubs.unsubscribe();
   }
 }

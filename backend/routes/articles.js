@@ -7,6 +7,11 @@ router.get('', (req, res, next) => {
   Article.find({title: { $regex: req.query.title, "$options": "i" }})
     .then(documents => {
     res.status(200).send(documents);
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: 'Fetching articles failed!'
+    })
   });
 });
 
@@ -24,6 +29,11 @@ router.post('', checkAuth, (req, res, next) => {
       message: 'Article added successfully!',
       article: savedArticle
     });
+  })
+  .catch(error => {
+    res.status(500).json({
+      message: 'Creating a article failed!'
+    })
   });
 });
 
@@ -42,6 +52,11 @@ router.put("/:id", checkAuth, (res, req, next) => {
       } else {
         res.res.status(401).json({ message: "Not Authorized!" });
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Couldn't update article!"
+      })
     });
 });
 
@@ -53,6 +68,11 @@ router.get("/:id", (req, res, next) => {
       } else {
         res.status(404).json({ message: 'Page not found!' });
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Fetching article failed!'
+      })
     });
 });
 
@@ -64,6 +84,11 @@ router.delete("/:id", checkAuth, (req, res, next) => {
       } else {
         res.status(401).json({ message: "Not Authorized!" });
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: 'Deleting article failed!'
+      })
     });
 });
 

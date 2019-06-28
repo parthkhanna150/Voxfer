@@ -12,19 +12,16 @@ router.post('/signup', (req, res, next) => {
         email: req.body.email,
         password: hash
       });
-      console.log(user);
       user.save()
         .then(result => {
-          console.log(result);
           res.status(201).json({
             message: 'User created!',
             result: result
           });
         })
         .catch(err => {
-          console.log(err);
           res.status(500).json({
-            error: err
+            message: "Invalid authentication credentials!"
           });
         });
   });
@@ -45,7 +42,7 @@ router.post('/login', (req, res, next) => {
     .then(result => {
       if (!result) {
         return res.status(401).json({
-          message: 'Auth failed'
+          message: 'Invalid authentication credentials!'
         });
       }
       const token = jwt.sign(

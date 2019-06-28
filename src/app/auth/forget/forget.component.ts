@@ -19,6 +19,7 @@ export class ForgetComponent implements OnInit {
   onForget(form: NgForm) {
     this.isLoading = true;
     if (form.invalid) {
+      this.isLoading = false;
       return;
     }
     console.log(form.value.email);

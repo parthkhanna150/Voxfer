@@ -111,6 +111,8 @@ export class ArticleService {
         this.articles = this.articles.filter(article => article.id !== id);
         this.articlesUpdated.next([...this.articles]);
         this.router.navigate(['/']);
+      }, () => {
+        this.router.navigate(['/']);
       });
   }
 

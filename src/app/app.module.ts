@@ -20,7 +20,8 @@ import {
   MatIconModule,
   MatAutocompleteModule,
   MatProgressSpinnerModule,
-  MatOptionModule} from '@angular/material';
+  MatOptionModule,
+  MatDialogModule} from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -29,6 +30,8 @@ import { AuthInterceptor } from './auth/auth-interceptor';
 import { ArticleSearchComponent } from './articles/article-search/article-search.component';
 import { HomeComponent } from './home/home.component';
 import { ForgetComponent } from './auth/forget/forget.component';
+import { ErrorInterceptor } from './error-interceptor';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,8 @@ import { ForgetComponent } from './auth/forget/forget.component';
     LoginComponent,
     ArticleSearchComponent,
     HomeComponent,
-    ForgetComponent
+    ForgetComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -62,9 +66,14 @@ import { ForgetComponent } from './auth/forget/forget.component';
     CKEditorModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    MatOptionModule
+    MatOptionModule,
+    MatDialogModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
-  bootstrap: [AppComponent]
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+  ],
+  bootstrap: [AppComponent],
+  entryComponents:  [ErrorComponent]
 })
 export class AppModule { }
