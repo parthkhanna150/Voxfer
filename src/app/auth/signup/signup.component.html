@@ -13,5 +13,6 @@
           <button style="margin-right: 1rem" mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Signup</button>
           <a mat-raised-button color="accent" routerLink="/forgot" *ngIf="!isLoading">Forgot Password</a>
         </form>
+        <p *ngIf="signup" id="sign-up-notification">Access request has been sent to the admin! We'll notify you by email you shortly</p>
       </mat-card>
     </div>
