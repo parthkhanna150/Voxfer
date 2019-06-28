@@ -35,6 +35,12 @@ a {
     left: 10%;
     top: 16%;
     transform: translateX(-50%);
+    min-height: 300px;
+    max-width: 200px;
+}
+
+.chips  {
+  padding-left: 5px;
 }
 
 mat-spinner {

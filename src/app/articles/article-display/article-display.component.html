@@ -13,7 +13,7 @@
           <mat-card-title>{{article?.title}}</mat-card-title>
         </mat-card-header>
       <div>
-          <mat-chip-list *ngFor="let category of article?.categories" aria-label="categories">
+          <mat-chip-list class="chips" *ngFor="let category of article?.categories" aria-label="categories">
             <mat-chip>{{category}}</mat-chip>
           </mat-chip-list>
       </div>
@@ -25,6 +25,6 @@
       </mat-card-content>
     </mat-card>
     <mat-card class="navigate-card">
-      <ul></ul>
+      <ul id="navigationUL"></ul>
     </mat-card>
 </div>

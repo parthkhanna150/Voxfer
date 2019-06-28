@@ -35,7 +35,7 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.userId = this.authService.getUserId();
       this.route.paramMap.subscribe((paramMap: ParamMap) => {
-          this.id = paramMap.get('id');
+        this.id = paramMap.get('id');
           this.articleService.getArticleById(this.id)
             .subscribe((response) => {
               this.article = {
@@ -45,6 +45,11 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
                 categories:  response.article.categories,
                 creator: response.article.creator
               };
+
+              const menuUl = document.getElementById('navigationUL');
+              while (menuUl.firstChild) {
+                menuUl.removeChild(menuUl.firstChild);
+              }
               this.article.content = this.articleService.addIdsH4s(this.article.content);
               this.buildSideMenu(this.article.content);
 
@@ -67,21 +72,18 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
     buildSideMenu(content: string) {
       const doc = new DOMParser().parseFromString(content, 'text/html');
       const h3s = doc.getElementsByTagName('h3');
-      const menuUl = document.querySelector('ul');
-      while (menuUl.firstChild) {
-        menuUl.removeChild(menuUl.firstChild);
-      }
+      const menuUl = document.getElementById('navigationUL');
       const menuLi = document.createElement('li');
-      menuLi.textContent = 'Content';
+      menuLi.textContent = 'Table of Contents';
       menuLi.setAttribute('style', 'text-decoration: none; color: black; padding-bottom: 1rem; font-weight: bold;');
       menuUl.appendChild(menuLi);
 
       const arrH3s = Array.from(h3s);
 
       arrH3s.forEach((h3, position) => {
+// tslint:disable-next-line: no-shadowed-variable
         const menuLi = document.createElement('li');
         const menuA = document.createElement('a');
-
         menuA.textContent = h3.textContent;
         menuA.setAttribute('href', 'display/' + this.article.id + '#' + position);
         menuA.setAttribute('style', 'text-decoration: none; color: black;');

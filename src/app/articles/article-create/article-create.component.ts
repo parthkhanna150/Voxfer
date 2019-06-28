@@ -30,7 +30,7 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   allCategories: string[] = categories;
   public Editor = ClassicEditor;
   public model = {
-    editorData: '<p>Hello, world!</p>'
+    editorData: '<p>Admin\'s recommendation: Use Heading-1 for Title, Heading-2 for all subheadings</p>'
   };
   private articleId = null;
   private mode = 'create';
