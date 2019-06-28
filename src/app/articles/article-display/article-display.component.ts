@@ -2,7 +2,7 @@ import { Component, OnInit, Pipe, PipeTransform, OnDestroy } from '@angular/core
 import { ArticleService } from 'src/app/articles/article.service';
 import { Article } from 'src/app/models/article';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -28,7 +28,6 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public articleService: ArticleService,
     private authService: AuthService) {}
 
@@ -72,6 +71,10 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
       while (menuUl.firstChild) {
         menuUl.removeChild(menuUl.firstChild);
       }
+      const menuLi = document.createElement('li');
+      menuLi.textContent = 'Content';
+      menuLi.setAttribute('style', 'text-decoration: none; color: black; padding-bottom: 1rem; font-weight: bold;');
+      menuUl.appendChild(menuLi);
 
       const arrH3s = Array.from(h3s);
 

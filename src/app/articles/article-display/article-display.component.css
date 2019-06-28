@@ -22,13 +22,19 @@ a {
   color: black;
 }
 
-/* TODO: THIS AINT RESPONSIVE YET. */
+@media only screen and (max-width: 1026px) {
+  .navigate-card {
+      display: none;
+  }
+}
 .navigate-card {
-  position: fixed;
-  top: 7.5rem;
-  width: 15%;
-  margin-left: 2rem;
-  min-height: 100px;
+    background-color:#ddd;
+    position: fixed;
+    padding-left: 0;
+    padding-right: 2.5rem;
+    left: 10%;
+    top: 16%;
+    transform: translateX(-50%);
 }
 
 mat-spinner {
