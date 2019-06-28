@@ -49,36 +49,48 @@ router.post('/signup', (req, res, next) => {
         });
       }
       console.log('Sucessfully registered');
-      const mailOptions = {
-        to: 'shaurya12345678@gmail.com',
-        from: process.env.EMAIL_USER,
-        subject: 'Approve New User',
-        text: `A new user has joined the website!\n\n
-            Please click on the following link, or paste this into your browser to complete the account activation process:\n\n
-            http://${process.env.FRONTEND_URI}/activate/${newUser._id}\n\n`
-      };
-      const success = `The account has been submitted for review.`;
-      const failure = 'Could not send activation email';
-      sendEmail(mailOptions, success, failure).then(() => {
-        delete newUser.password;
-        res.status(201).json({
-          message: 'User created!',
-          result: newUser
-        });
-      });
+      jwt.sign({
+          userId: newUser.id,
+        },
+        process.env.ACTIVATION_SECRET,
+        {
+          expiresIn: '30d',
+        },
+        (err, emailToken) => {
+          if(err){ return res.status(500).send('Error sending activation email.'); }
+          const mailOptions = {
+            to: 'shaurya12345678@gmail.com',
+            from: process.env.EMAIL_USER,
+            subject: 'Approve New User',
+            text: `A new user has joined the website!\n\n
+                Please click on the following link, or paste this into your browser to complete the account activation process:\n\n
+                http://${process.env.BACKEND_URI}/api/user/activate/${emailToken}\n\n`
+          };
+          const success = `The account has been submitted for review.`;
+          const failure = 'Could not send activation email';
+          sendEmail(mailOptions, success, failure).then(() => {
+            delete newUser.password;
+            res.status(201).json({
+              message: 'User created!',
+              result: newUser
+            });
+          });
+        },
+      );
     });
   });
 });
 
-router.get('/activate/:userId', (req, res, next) => {
-  User.findById(req.params.userId).then(user => {
+router.get('/activate/:token', (req, res, next) => {
+  const id = jwt.verify(req.params.token, process.env.ACTIVATION_SECRET).userId;
+  User.findById(id).then(user => {
     user.active = true;
     user.save().then(() => {
       const mailOptions = {
         to: user.email,
         from: process.env.EMAIL_USER,
         subject: 'Account activated!',
-        text: `Your account on SPU has been activated and is read to use.\n\n`
+        text: `Your account on SPU has been activated and is ready to use.\n\n`
       };
       const success = 'User has been notified of account activation.';
       const failure = 'Failed to send account activation notification email to user.';
@@ -86,7 +98,7 @@ router.get('/activate/:userId', (req, res, next) => {
         return res.status(201).json({ message: 'User has been activated!' });
       });
     })
-  }).then(err => { return res.status(500).json('Could not activate user!'); });
+  }).catch(err => { return res.status(500).json('Could not activate user!'); });
 });
 
 router.post('/login', (req, res, next) => {
@@ -94,14 +106,14 @@ router.post('/login', (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
-        throw('Could not find user!');
+        throw ('Could not find user!');
       }
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
       if (!result) {
-        throw('Incorrect username or password.');
+        throw ('Incorrect username or password.');
       }
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
