@@ -7,6 +7,11 @@ a {
   color: white;
 }
 
+#searchBox {
+  font-size: 15px;
+  padding-top: 10px;
+}
+
 .spacer {
   flex: 1 1 auto;
 }

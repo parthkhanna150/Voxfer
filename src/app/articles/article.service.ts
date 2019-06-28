@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ArticleService {
+  private isHomeUpdated = new Subject<boolean>();
   articles: Article[] = [];
   searchResults: Article[];
   private articlesUpdated = new Subject<Article[]>();
@@ -30,6 +31,10 @@ export class ArticleService {
         this.articlesUpdated.next([...this.articles]);
         this.router.navigate(['display', response.article._id]);
       });
+  }
+
+  getIsHomeUpdateListener() {
+    return this.isHomeUpdated.asObservable();
   }
 
   getArticleUpdateListener() {
@@ -125,5 +130,9 @@ export class ArticleService {
           };
       });
     }));
+  }
+
+  headerUpdate(isHome: boolean) {
+    this.isHomeUpdated.next(isHome);
   }
 }

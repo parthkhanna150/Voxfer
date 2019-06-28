@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { ArticleService } from 'src/app/articles/article.service';
 
 @Component({
   templateUrl: './forget.component.html',
   styleUrls: ['./forget.component.css']
 })
-export class ForgetComponent {
+export class ForgetComponent implements OnInit {
   isLoading = false;
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private articleService: ArticleService) {}
+
+  ngOnInit() {
+    this.articleService.headerUpdate(false);
+  }
 
   onForget(form: NgForm) {
     this.isLoading = true;

@@ -65,8 +65,10 @@ export class ArticleCreateComponent implements OnInit {
             };
             this.model.editorData = this.article.content;
             this.categories = this.article.categories;
-        });
+            this.articleService.headerUpdate(false);
+          });
       } else {
+        this.articleService.headerUpdate(false);
         this.mode = 'create';
         this.articleId = null;
       }

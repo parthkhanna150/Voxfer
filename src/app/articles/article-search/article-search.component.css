@@ -4,6 +4,7 @@ mat-option{
 
 ::ng-deep .cdk-overlay-pane {
     min-width:450px;
+    padding: 0;
 }
 
 #option-button {

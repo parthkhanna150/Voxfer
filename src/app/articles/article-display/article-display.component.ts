@@ -55,6 +55,7 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
                   this.userIsAuthenticated = isAuthenticated;
                   this.userId  = this.authService.getUserId();
                 });
+              this.articleService.headerUpdate(false);
               this.isLoading = false;
         });
       });
