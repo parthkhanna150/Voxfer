@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
+  signup = false;
   private authStatusSub: Subscription;
 
   constructor(
@@ -31,6 +32,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   onSignup(form: NgForm) {
     this.isLoading = true;
+    this.signup = true;
     if (form.invalid) {
       this.isLoading = false;
       return;
