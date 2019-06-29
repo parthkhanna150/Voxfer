@@ -1,10 +1,11 @@
 <div>
-  <mat-form-field>
-      <input #searchInput [formControl]="autoCompleteControl" type="text" placeholder="Search Article" matInput [matAutocomplete]="auto">
+  <mat-form-field style="margin-right: 1rem">
+      <input #searchInput [formControl]="autoCompleteControl" [(ngModel)]="seachField" type="text" placeholder="Article..." matInput [matAutocomplete]="auto">
       <mat-autocomplete id="dropdown" autoActiveFirstOption #auto="matAutocomplete">
           <mat-option *ngFor="let article of response$ | async" [value]="article.title">
             <a id="option-button" mat-button [routerLink]="['/display', article.id]">{{ article.title }}</a>
           </mat-option>
       </mat-autocomplete>
   </mat-form-field>
+  <a mat-raised-button color="accent" [routerLink]="['/display', seachField]">Search</a>
 </div>

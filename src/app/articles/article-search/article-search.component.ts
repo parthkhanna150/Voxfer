@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
 })
 export class ArticleSearchComponent implements OnInit {
   response$: Observable<Article[]>;
+  searchField: string;
   public autoCompleteControl = new FormControl();
 
   constructor(private articleService: ArticleService) {}
