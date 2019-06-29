@@ -30,7 +30,7 @@ exports.createUser = (req, res, next) => {
           try{
             jwt.sign(
               {_id: fetchedUser._id},
-              'THIS_is_THE_secret_should_BE_lonGeR',
+              process.env.JWT_KEY,
               {expiresIn: '14d'},
               (err, emailToken) => {
                 const url = `http://localhost:3000/api/user/confirmation/${emailToken}`;
@@ -72,7 +72,7 @@ exports.userLogin = (req, res, next) => {
       }
       const token = jwt.sign(
         {email: fetchedUser.email, userId: fetchedUser._id},
-        'THIS_is_THE_secret_should_BE_lonGeR',
+        process.env.JWT_KEY,
         {expiresIn: '1h'}
         );
       res.status(200).json({
@@ -90,7 +90,7 @@ exports.userLogin = (req, res, next) => {
 
 exports.authenticateUser = async (req, res, next) => {
   try {
-    const id = jwt.verify(req.params.token, 'THIS_is_THE_secret_should_BE_lonGeR');
+    const id = jwt.verify(req.params.token, process.env.JWT_KEY);
     User.updateOne({_id: id}, {active: true})
       .then(res => {
         User.findById(id)

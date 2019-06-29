@@ -6,9 +6,7 @@ const app = express();
 const articlesRoutes = require('./routes/articles')
 const userRoutes = require('./routes/user');
 
-const api_key = require('../app_env');
-
-mongoose.connect("mongodb+srv://Parth:"+api_key+"@cluster0-cneed.mongodb.net/test?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://Parth:"+ process.env.MONGO_ATLAS_PW +"@cluster0-cneed.mongodb.net/test?retryWrites=true&w=majority")
   .then(() => {
     console.log('connected to database');
   })

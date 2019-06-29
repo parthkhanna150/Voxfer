@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
+const BACKEND_URL = environment.apiUrl + 'articles';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +28,7 @@ export class ArticleService {
       categories: tags,
       creator: null
     };
-    this.http.post<{message: string, article: any}>('http://localhost:3000/api/articles', article)
+    this.http.post<{message: string, article: any}>(BACKEND_URL, article)
       .subscribe((response) => {
         this.articles.push(article);
         this.articlesUpdated.next([...this.articles]);
@@ -42,7 +45,7 @@ export class ArticleService {
   }
 
   getArticleById(id: string) {
-    return this.http.get<{article: any}>('http://localhost:3000/api/articles/' + id);
+    return this.http.get<{article: any}>(BACKEND_URL + '/' + id);
   }
 
   updateArticle(id: string, title: string, tags: string[], content: string) {
@@ -54,7 +57,7 @@ export class ArticleService {
       creator: null
     };
 
-    this.http.put('http://localhost:3000/api/articles/' + id, article)
+    this.http.put(BACKEND_URL + '/' + id, article)
       .subscribe((res) => {
         const updatedArticles = [...this.articles];
         const oldIdx  = updatedArticles.findIndex(p => p.id === article.id);
@@ -66,7 +69,7 @@ export class ArticleService {
   }
 
   getArticleByTitle(title: string) {
-    return this.http.get<{article: any[]}>('http://localhost:3000/api/articles/?title=' + title);
+    return this.http.get<{article: any[]}>(BACKEND_URL + '/?title=' + title);
   }
 
   addIdsH4s(content: string) {
@@ -86,7 +89,7 @@ export class ArticleService {
   }
 
   getArticles() {
-    this.http.get<{message: string, articles: any}>('http://localhost:3000/api/articles')
+    this.http.get<{message: string, articles: any}>(BACKEND_URL)
       .pipe(map((response) => {
         return response.articles.map(article => {
           return {
@@ -105,7 +108,7 @@ export class ArticleService {
   }
 
   deleteArticle(id: string) {
-    this.http.delete('http://localhost:3000/api/articles/' + id)
+    this.http.delete(BACKEND_URL + '/' + id)
       .subscribe(() => {
         this.articles = this.articles.filter(article => article.id !== id);
         this.articlesUpdated.next([...this.articles]);
@@ -119,7 +122,7 @@ export class ArticleService {
     if (title.length < 3) {
       return of([]);
     }
-    return this.http.get<any[]>('http://localhost:3000/api/articles/?title=' + title)
+    return this.http.get<any[]>(BACKEND_URL + '/?title=' + title)
     .pipe(map(response => {
       return response.map(article => {
         return {
