@@ -6,6 +6,7 @@ import {
   debounceTime, distinctUntilChanged, switchMap
 } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-search',
@@ -14,9 +15,10 @@ import { FormControl } from '@angular/forms';
 })
 export class ArticleSearchComponent implements OnInit {
   response$: Observable<Article[]>;
+  article: any;
   public autoCompleteControl = new FormControl();
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private router: Router) {}
 
   ngOnInit() {
     this.response$ = this.autoCompleteControl.valueChanges.pipe(
@@ -33,6 +35,16 @@ export class ArticleSearchComponent implements OnInit {
         }
       })
       );
+    }
+
+    display(title: string) {
+      if (title.length > 3) {
+        this.articleService.getArticleByTitle(title)
+        .subscribe(articleData => {
+          this.article = articleData[0];
+          this.router.navigate([`/display/${this.article._id}`]);
+        });
+      }
     }
 
     lookup(value: string): Observable<Article[]> {
