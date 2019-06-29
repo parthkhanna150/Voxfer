@@ -66,8 +66,7 @@ export class ArticleService {
   }
 
   getArticleByTitle(title: string) {
-    const article: Article =  {...this.articles.find((item) => item.title === title)};
-    return article;
+    return this.http.get<{article: any[]}>('http://localhost:3000/api/articles/?title=' + title);
   }
 
   addIdsH4s(content: string) {
