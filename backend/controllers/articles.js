@@ -44,7 +44,7 @@ exports.updateArticle  = (res, req, next) => {
   });
   Article.updateOne({_id: req.req.params.id, creator: req.req.userData.userId}, article)
     .then(result => {
-      if (result.nModified > 0) {
+      if (result.n > 0) {
         res.res.status(200).json({ message: "Update successful!" });
       } else {
         res.res.status(401).json({ message: "Not Authorized!" });
