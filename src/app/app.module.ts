@@ -9,19 +9,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { ArticleDisplayComponent, SafeHtmlPipe } from './articles/article-display/article-display.component';
 import { ArticleCreateComponent } from './articles/article-create/article-create.component';
-import {
-  MatInputModule,
-  MatButtonModule,
-  MatFormFieldModule,
-  MatCardModule,
-  MatToolbarModule,
-  MatChipsModule,
-  MatDividerModule,
-  MatIconModule,
-  MatAutocompleteModule,
-  MatProgressSpinnerModule,
-  MatOptionModule,
-  MatDialogModule} from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { ArticleListComponent } from './articles/article-list/article-list.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -32,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { ForgetComponent } from './auth/forget/forget.component';
 import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './error/error.component';
+import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [
@@ -54,20 +42,9 @@ import { ErrorComponent } from './error/error.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatDividerModule,
-    MatChipsModule,
-    MatIconModule,
-    MatAutocompleteModule,
     CKEditorModule,
     HttpClientModule,
-    MatProgressSpinnerModule,
-    MatOptionModule,
-    MatDialogModule
+    AngularMaterialModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
