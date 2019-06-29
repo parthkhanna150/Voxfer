@@ -2,12 +2,10 @@ const express = require('express');
 const { promisify } = require('util');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const User = require('../model/User');
-const randomBytesAsync = promisify(crypto.randomBytes);
 
 const sendEmail = (mailOptions, success, failure) => {
   let transporter = nodemailer.createTransport({
@@ -50,14 +48,14 @@ router.post('/signup', (req, res, next) => {
       }
       console.log('Sucessfully registered');
       jwt.sign({
-          userId: newUser.id,
-        },
+        userId: newUser.id,
+      },
         process.env.ACTIVATION_SECRET,
         {
           expiresIn: '30d',
         },
         (err, emailToken) => {
-          if(err){ return res.status(500).send('Error sending activation email.'); }
+          if (err) { return res.status(500).send('Error sending activation email.'); }
           const mailOptions = {
             to: 'shaurya12345678@gmail.com',
             from: process.env.EMAIL_USER,
@@ -133,59 +131,103 @@ router.post('/login', (req, res, next) => {
     });
 });
 
+// POST request from Angular with the email to reset the password for.
 router.post('/reset', (req, res, next) => {
-  // this will send an email to this user with a link
-  const createRandomToken = randomBytesAsync(16)
-    .then(buf => buf.toString('hex'));
-
-  const setRandomToken = token =>
-    User.findOne({ email: req.body.email })
-      .then((user) => {
-        if (!user) {
-          res.status(500).json({ error: 'Account with that email address does not exist.' });
-          console.log('Email does not exist.');
-        } else {
-          user.passwordResetToken = token;
-          user.passwordResetExpires = Date.now() + 3600000; // 1 hour
-          user = user.save();
-        }
-        return user;
-      });
-  createRandomToken
-    .then(setRandomToken)
-    .then((user) => {
-      const mailOptions = {
-        to: user.email,
-        from: process.env.EMAIL_USER,
-        subject: 'Reset your password on SPU',
-        text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-        Please click on the following link, or paste this into your browser to complete the process:\n\n
-        http://${process.env.FRONTEND_URI}/reset/${user.passwordResetToken}\n\n
-        If you did not request this, please ignore this email and your password will remain unchanged.\n`
-      };
-      const success = `An e-mail has been sent to ${user.email} with further instructions.`;
-      const failure = 'Could not send forgot password email.';
-      sendEmail(mailOptions, success, failure)
-    })
-    .catch(next);
-  return res.status(201).json({
-    message: 'Reset Successful!'
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (!user) {
+      console.log('Password Reset: Email does not exist.');
+      return res.status(500).json({ error: 'Account with that email address does not exist.' });
+    } else {
+      const secret = user.password + '-' + user.createdAt;
+      jwt.sign({}, secret,
+        {
+          expiresIn: '1d',
+        },
+        (err, emailToken) => {
+          if (err) { throw ('Error sending reset password email.'); }
+          const mailOptions = {
+            to: user.email,
+            from: process.env.EMAIL_USER,
+            subject: 'Reset your password on SPU',
+            text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+          Please click on the following link, or paste this into your browser to complete the process:\n\n
+          http://${process.env.BACKEND_URI}/api/reset/${user._id}/${emailToken}\n\n
+          If you did not request this, please ignore this email and your password will remain unchanged.\n`
+          };
+          const success = `An e-mail has been sent to ${user.email} with further instructions.`;
+          const failure = 'Could not send forgot password email.';
+          sendEmail(mailOptions, success, failure);
+        },
+      );
+    }
+  }).catch(err => { return res.status(500).send(err); });
+  return res.status(200).json({
+    message: 'Reset email sent!'
   });
 });
 
-router.get('/reset/:token', (req, res, next) => {
-  // Redirect user back to home page if already logged in
+router.get('/reset/:userId/:token', (req, res, next) => {
   User
-    .findOne({ passwordResetToken: req.params.token })
-    .where('passwordResetExpires').gt(Date.now())
+    .findById(req.params.userId)
     .exec((err, user) => {
-      if (err) { return res.status(500).json({ error: err }); }
+      if (err) { throw(err); }
       if (!user) {
         console.log('Password reset token is invalid or has expired.');
-        return res.status(500).json({ error: 'Password reset token is invalid or has expired.' });
+        throw('Password reset token is invalid or has expired.');
       }
-      return res.status(200).json({ message: 'Reset link is valid!' });
+      let token;
+      try { 
+        token = jwt.verify(req.params.token, user.password + '-' + user.createdAt); 
+      } catch(err) { 
+        throw('Password reset token is invalid or has expired.');
+      }
+      if (Date.now() >= token.expiresIn * 1000) {
+        throw('Password reset token is invalid or has expired.');
+      }
+      // If the token is valid, redirect to the frontend (password + confirm password form)
+      return res.redirect(`http://${process.env.FRONTEND_URI}/reset/${user._id}/${token}`);
+    }).catch(err => { 
+      // Todo: Redirect to some error page on Angular instead of sending a response.
+      return res.status(500).json({ error: err });
     });
 });
+
+// POST request from Angular with the new password.
+router.post('/reset/:userId/:token', (req, res, next) => {
+  User
+    .findById(req.params.userId)
+    .exec((err, user) => {
+      if (err) { throw(err); }
+      if (!user) {
+        console.log('Password reset token is invalid or has expired.');
+        throw('Password reset token is invalid or has expired.');
+      }
+      let token;
+      try { 
+        token = jwt.verify(req.params.token, user.password + '-' + user.createdAt);
+      } catch(err) { 
+        throw('Password reset token is invalid or has expired.');
+      }
+      if (Date.now() >= token.expiresIn * 1000) {
+        throw('Password reset token is invalid or has expired.');
+      }
+      // If the token is valid, change the password.
+      user.password = req.body.password;
+      user.save(() => {
+        const mailOptions = {
+          to: user.email,
+          from: process.env.EMAIL_USER,
+          subject: 'Your SPU password has been changed',
+          text: `This is a confirmation that the password for your account ${user.email} has just been changed.\n`
+        };
+        const success = `The user ${user.email} has been notified of the password change.`;
+        const failure = 'Could not notify the user of the password change.';
+        sendEmail(mailOptions, success, failure);
+      });
+      return res.status(201).json({ message: 'Password successfully changed!'});
+    }).catch(err => { 
+      return res.status(500).json({ error: err })
+    });
+})
 
 module.exports = router;
