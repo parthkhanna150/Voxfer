@@ -38,11 +38,13 @@ export class ArticleSearchComponent implements OnInit {
     }
 
     display(title: string) {
-      this.articleService.getArticleByTitle(title)
+      if (title.length > 3) {
+        this.articleService.getArticleByTitle(title)
         .subscribe(articleData => {
           this.article = articleData[0];
           this.router.navigate([`/display/${this.article._id}`]);
         });
+      }
     }
 
     lookup(value: string): Observable<Article[]> {
