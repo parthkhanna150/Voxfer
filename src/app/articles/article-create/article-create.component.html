@@ -32,8 +32,16 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <ckeditor [(ngModel)]="model.editorData" name="ckeditor" [editor]="Editor"></ckeditor>
-        <div>
+        <ckeditor [(ngModel)]="model.editorData"  name="ckeditor" [editor]="Editor"
+        [config]="{ plugins: [ EasyImage, Image, ImageUpload, CloudServices ],
+          toolbar: ['imageUpload'],
+          cloudServices: {
+            tokenUrl: 'my_token_here',
+            uploadUrl: 'my_token_here'
+          }
+        }">
+        </ckeditor>
+         <div>
           <button mat-raised-button (click)="goBack()">Back</button>
           <button type="submit" mat-raised-button color="accent">Save</button>
         </div>
