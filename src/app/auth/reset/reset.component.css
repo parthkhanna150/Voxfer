@@ -1,0 +1,19 @@
+mat-spinner {
+  margin: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.main-div{
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-card {
+  width: 400px;
+  height: 300px;
+}

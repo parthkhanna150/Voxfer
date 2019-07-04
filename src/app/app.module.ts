@@ -24,6 +24,7 @@ import { ErrorComponent } from './error/error.component';
 
 import { ErrorInterceptor } from './error-interceptor';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { ResetComponent } from './auth/reset/reset.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     ArticleSearchComponent,
     HomeComponent,
     ForgetComponent,
-    ErrorComponent
+    ErrorComponent,
+    ResetComponent
   ],
   imports: [
     BrowserModule,

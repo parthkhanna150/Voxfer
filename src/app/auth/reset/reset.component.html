@@ -1,0 +1,16 @@
+<div class="main-div">
+    <mat-card>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+        <form (submit)="onReset(resetForm)" #resetForm="ngForm" *ngIf="!isLoading">
+          <mat-form-field>
+            <input matInput minlength="5" type="password" placeholder="New Password" name="passwordNew" ngModel #passwordNewInput="ngModel" required>
+            <mat-error *ngIf="passwordNewInput.invalid">Please enter a valid password (atleast 5 characters)</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="password" placeholder="Confirm Password" name="passwordConfirm" ngModel #passwordConfirmInput="ngModel" required>
+            <mat-error *ngIf="passwordConfirmInput.invalid">Inputs don't match!</mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Reset Password</button>
+        </form>
+      </mat-card>
+</div>

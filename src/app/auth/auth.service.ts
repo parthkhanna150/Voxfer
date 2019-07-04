@@ -125,6 +125,14 @@ export class AuthService {
       });
   }
 
+  resetPassword(newPwd: string, token: string) {
+    this.http.post(BACKEND_URL + '/reset' + token, newPwd)
+      .subscribe(response => {
+        console.log(response);
+        this.router.navigate(['/login']);
+      });
+  }
+
   logout() {
     this.token = null;
     this.isAuthenticated = false;
