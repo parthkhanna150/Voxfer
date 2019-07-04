@@ -83,11 +83,13 @@ export class AuthService {
   }
 
   forgetPassword(email: string) {
-    this.http.post(BACKEND_URL + '/reset', { email: email })
-      .subscribe((response) => {
-        console.log(response);
-        this.router.navigate(['/login']);
-      });
+    alert('Sorry, this feature is under development right now!');
+    this.router.navigate(['/login']);
+    // this.http.post(BACKEND_URL + '/reset', { email: email })
+    //   .subscribe((response) => {
+    //     console.log(response);
+    //     this.router.navigate(['/login']);
+    //   });
   }
 
   createUser(email: string, password: string) {

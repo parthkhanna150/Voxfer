@@ -22,7 +22,6 @@ export class ForgetComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    console.log(form.value.email);
     this.authService.forgetPassword(form.value.email);
   }
 }
