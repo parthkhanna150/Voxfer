@@ -47,7 +47,9 @@ exports.createUser = (req, res, next) => {
           }
         })
         .catch(err => {
-          console.log(err);
+          return res.status(401).json({
+            message: 'Sign up failed'
+          });
         });
   });
 }
@@ -83,7 +85,7 @@ exports.userLogin = (req, res, next) => {
     })
     .catch(err => {
       return res.status(401).json({
-        message: 'Auth failed'
+        message: 'Login failed'
       });
   });
 }
