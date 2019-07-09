@@ -12,6 +12,7 @@ import { categories } from 'src/app/models/mock-categories';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Article } from 'src/app/models/article';
 import { AuthService } from 'src/app/auth/auth.service';
+import { sample } from 'src/app/articles/article-create/sample.model';
 
 @Component({
   selector: 'app-article-create',
@@ -29,8 +30,9 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   categories: string[] = ['Chemistry'];
   allCategories: string[] = categories;
   public Editor = ClassicEditor;
+  sampleContent = sample;
   public model = {
-    editorData: '<p>Admin\'s recommendation: Use Heading-1 for Title, Heading-2 for all subheadings</p>'
+    editorData: this.sampleContent
   };
   private articleId = null;
   private mode = 'create';
