@@ -3,54 +3,101 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const User = require('../model/user');
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: 'researchwiki1234@gmail.com',
-    pass: 'Admin@123'
-  }
-});
+const sendEmail = (mailOptions, success, failure) => {
+  let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  return transporter.sendMail(mailOptions)
+    .then(() => {
+      console.log(success);
+    })
+    .catch((err) => {
+      console.log(failure);
+      return res.status(500).json({ error: failure });
+    });
+};
 
 exports.createUser = (req, res, next) => {
-  let fetchedUser;
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-        active: false
+  User.findOne({ email: req.body.email }, (err, existingUser) => {
+    if (err) { return next(err); }
+    if (existingUser) {
+      console.log('Email already exists.');
+      return res.status(500).json({
+        error: 'Account with that email address already exists.'
       });
-      user.save()
-        .then(result => {
-          res.status(201).json({
-            message: 'User created!',
-            result: result
-          });
-          fetchedUser = result;
-          try{
-            jwt.sign(
-              {_id: fetchedUser._id},
-              process.env.JWT_KEY,
-              {expiresIn: '14d'},
-              (err, emailToken) => {
-                const url = `http://localhost:3000/api/user/confirmation/${emailToken}`;
+    }
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      active: false
+    });
 
-                transporter.sendMail({
-                  to: 'parth.khanna@mail.mcgill.ca',
-                  subject: `Approve access for ${req.body.email}`,
-                  html: `Hi Brian, Please click this link to give access i.e.create, delete and edit articles (owned by the user): <a href="${url}">Activate ${req.body.email}</a>`
-                });
-              },
-            );
-          } catch(err) {
-            console.log(err);
-          }
-        })
-        .catch(err => {
-          return res.status(401).json({
-            message: 'Sign up failed'
-          });
+    user.save((err, newUser) => {
+      if (err) {
+        console.log('error', err);
+        return res.status(500).json({
+          error: 'Signup failed'
         });
+      }
+      console.log('Sucessfully registered');
+      jwt.sign({
+        userId: newUser.id,
+      },
+        process.env.ACTIVATION_SECRET,
+        {
+          expiresIn: '30d',
+        },
+        (err, emailToken) => {
+          if (err) { console.log(err); return res.status(500).send('Error sending activation email.'); }
+          const mailOptions = {
+            to: process.env.ADMIN_EMAIL,
+            from: process.env.EMAIL_USER,
+            subject: 'Approve New User',
+            text: `A new user wants to join SPU!\n\n
+                Please click on the following link, or paste this into your browser to complete the account activation process:\n\n
+                ${process.env.BACKEND_URL}/api/user/activate/${emailToken}\n\n`
+          };
+          const success = `The account has been submitted for review.`;
+          const failure = 'Error sending activation email.';
+          sendEmail(mailOptions, success, failure).then(() => {
+            delete newUser.password;
+            res.status(201).json({
+              message: 'User created!',
+              result: newUser
+            });
+          });
+        },
+      );
+    });
+  });
+}
+
+exports.activateUser = (req, res, next) => {
+  jwt.verify(req.params.token, process.env.ACTIVATION_SECRET, (err, decoded) => {
+    if (err) { return res.status(500).json({ error: 'Could not validate token.' }); }
+    User.findById(decoded.userId, (err, user) => {
+      if (err) { return res.status(500).json({ error: 'Could not activate user!' }); }
+      user.active = true;
+      user.save().then(() => {
+        const mailOptions = {
+          to: user.email,
+          from: process.env.EMAIL_USER,
+          subject: 'Account activated!',
+          text: `Your account on SPU has been activated and is ready to use.\n\n Login <a href="${process.env.FRONTEND_URL}/login"> here</a>`
+        };
+        const success = 'User has been notified of account activation.';
+        const failure = 'Failed to send account activation notification email to user.';
+        sendEmail(mailOptions, success, failure).then(() => {
+          console.log('User has been activated.');
+          // Generate an HTML page displaying the activation, wait fo 2 seconds, then redirect.
+          return res.redirect(process.env.FRONTEND_URL + '/');
+        });
+      })
+    })
   });
 }
 
@@ -59,25 +106,21 @@ exports.userLogin = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user || !user.active) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
+        throw ('Login failed!');
       }
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({
-          message: 'Invalid authentication credentials!'
-        });
+        throw ('Incorrect username or password.');
       }
       const token = jwt.sign(
-        {email: fetchedUser.email, userId: fetchedUser._id},
-        process.env.JWT_KEY,
-        {expiresIn: '1h'}
-        );
-      res.status(200).json({
+        { email: fetchedUser.email, userId: fetchedUser._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+      return res.status(200).json({
         token: token,
         expiresIn: 3600,
         userId: fetchedUser._id
@@ -85,36 +128,7 @@ exports.userLogin = (req, res, next) => {
     })
     .catch(err => {
       return res.status(401).json({
-        message: 'Login failed'
+        message: 'Login failed!'
       });
-  });
-}
-
-exports.authenticateUser = async (req, res, next) => {
-  try {
-    const id = jwt.verify(req.params.token, process.env.JWT_KEY);
-    User.updateOne({_id: id}, {active: true})
-      .then(res => {
-        User.findById(id)
-          .then(result => {
-            transporter.sendMail({
-              to: `${result.email}`,
-              subject: `Approved Access to SPU`,
-              html: `Hi ${result.email}, You have been authenticated! Login <a href="http://localhost:4200/login"> here</a>`
-            });
-          });
     });
-
-  } catch(err) {
-    console.log(err);
-  }
-  return res.redirect('http://localhost:4200/');
-}
-
-exports.resetPassword = (req, res, next) => {
-  // this will send an email to this user with a link
-  console.log(req.body.email);
-  res.status(201).json({
-    message: 'Reset!'
-  });
-}
+};
