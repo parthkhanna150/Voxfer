@@ -1,11 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const app = express();
 
 const articlesRoutes = require('./routes/articles')
 const userRoutes = require('./routes/user');
 
+// Load Environment Variables into process.env from a custom .env file
+dotenv.config({path: __dirname + '/.env'});
+
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 mongoose.connect("mongodb+srv://Parth:"+ process.env.MONGO_ATLAS_PW +"@cluster0-cneed.mongodb.net/test?retryWrites=true&w=majority")
   .then(() => {
     console.log('connected to database');
