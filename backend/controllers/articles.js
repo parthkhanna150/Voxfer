@@ -16,6 +16,7 @@ exports.createArticle = (req, res, next) => {
   let savedArticle;
   const article = new Article({
     title: req.body.title,
+    authors: req.body.authors,
     content: req.body.content,
     summary: req.body.summary,
     creator: req.userData.userId,
@@ -39,6 +40,7 @@ exports.updateArticle  = (res, req, next) => {
   const article = new Article({
     _id: req.req.body.id,
     title: req.req.body.title,
+    authors: req.req.body.authors,
     content: req.req.body.content,
     summary: req.req.body.summary,
     categories: req.req.body.categories,

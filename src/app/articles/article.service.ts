@@ -60,7 +60,6 @@ export class ArticleService {
       categories: tags,
       creator: null
     };
-
     this.http.put(BACKEND_URL + '/' + id, article)
       .subscribe((res) => {
         const updatedArticles = [...this.articles];

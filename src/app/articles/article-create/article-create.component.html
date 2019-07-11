@@ -6,7 +6,7 @@
         <mat-error *ngIf="title.invalid">Please enter a valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
-          <input matInput minlength="3" required name="authors" placeholder="Authors" #authors>
+          <input matInput minlength="3" required name="authors" [ngModel]="article?.authors" placeholder="Authors" #authors="ngModel">
           <mat-error *ngIf="authors.invalid">Please enter valid author names</mat-error>
       </mat-form-field>
       <mat-form-field>
