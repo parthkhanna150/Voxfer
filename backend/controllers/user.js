@@ -6,51 +6,79 @@ const User = require('../model/user');
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'researchwiki1234@gmail.com',
-    pass: 'Admin@123'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
 
+function logError(res, errorCode, error) {
+  console.log(error);
+  return res.status(errorCode).json({ message: error });
+}
+
 exports.createUser = (req, res, next) => {
-  let fetchedUser;
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-        active: false
-      });
-      user.save()
-        .then(result => {
+  const user = new User({
+    email: req.body.email,
+    password: req.body.password,
+    active: false
+  });
+
+  user.save().then(newUser => {
+    console.log('Sucessfully created new user.');
+    jwt.sign({
+      userId: newUser.id,
+    },
+      process.env.ACTIVATION_SECRET,
+      {
+        expiresIn: '30d',
+      },
+      (err, emailToken) => {
+        if (err) { return logError(res, 500, 'Error sending activation email.'); };
+        let mailOptions = {
+          to: process.env.ADMIN_EMAIL,
+          subject: 'Approve New User',
+          text: `A new user wants to join SPU!\n\n
+                Please click on the following link, or paste this into your browser to complete the account activation process:\n\n
+                ${process.env.BACKEND_URL}/api/user/activate/${emailToken}\n\n`
+        };
+        transporter.sendMail(mailOptions).then(() => {
+          console.log(`The account has been submitted for review.`);
+          delete newUser.password;
           res.status(201).json({
             message: 'User created!',
-            result: result
+            result: newUser
           });
-          fetchedUser = result;
-          try{
-            jwt.sign(
-              {_id: fetchedUser._id},
-              process.env.JWT_KEY,
-              {expiresIn: '14d'},
-              (err, emailToken) => {
-                const url = `http://localhost:3000/api/user/confirmation/${emailToken}`;
+        }).catch(err => { return logError(res, 500, 'Error sending activation email.'); });
+      },
+    );
+  }).catch(err => {
+    console.log(err.message || err);
+    return res.status(500).json({
+      // If user already exists, send that as an error. Otherwise, send a generic error.
+      message: (err.name === 'ValidationError') ? 'Account with that email address already exists.' : 'Unknown error occured.'
+    });
+  })
+}
 
-                transporter.sendMail({
-                  to: 'parth.khanna@mail.mcgill.ca',
-                  subject: `Approve access for ${req.body.email}`,
-                  html: `Hi Brian, Please click this link to give access i.e.create, delete and edit articles (owned by the user): <a href="${url}">Activate ${req.body.email}</a>`
-                });
-              },
-            );
-          } catch(err) {
-            console.log(err);
-          }
-        })
-        .catch(err => {
-          return res.status(401).json({
-            message: 'Sign up failed'
-          });
-        });
+exports.activateUser = (req, res, next) => {
+  jwt.verify(req.params.token, process.env.ACTIVATION_SECRET, (err, decoded) => {
+    if (err) { return logError(res, 500, 'Could not validate token.'); }
+    User.findById(decoded.userId).then(user => {
+      user.active = true;
+      user.save().then(() => {
+        console.log('User has been activated.');
+        let mailOptions = {
+          to: user.email,
+          subject: 'Account activated!',
+          text: `Your account on SPU has been activated and is ready to use.\n\n Login: ${process.env.FRONTEND_URL}/login`
+        };
+        transporter.sendMail(mailOptions).then(() => {
+          console.log('User has been notified of account activation.');
+          // TODO: Generate an HTML page displaying the activation, wait for 2 seconds, then redirect.
+          return res.redirect(process.env.FRONTEND_URL + '/');
+        }).catch(err => { return logError(res, 500, 'Failed to send account activation notification email to user.'); });
+      })
+    }).catch(err => { return logError(res, 500, 'Could not find user.'); });
   });
 }
 
@@ -59,62 +87,32 @@ exports.userLogin = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user || !user.active) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
+        throw ('Login failed!');
       }
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({
-          message: 'Invalid authentication credentials!'
-        });
+        throw ('Incorrect username or password.');
       }
       const token = jwt.sign(
-        {email: fetchedUser.email, userId: fetchedUser._id},
-        process.env.JWT_KEY,
-        {expiresIn: '1h'}
-        );
-      res.status(200).json({
-        token: token,
-        expiresIn: 3600,
-        userId: fetchedUser._id
-      });
+        { email: fetchedUser.email, userId: fetchedUser._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' },
+        (err, token) => {
+          if(err) { throw('Login failed!'); }
+          return res.status(200).json({
+            token: token,
+            expiresIn: 3600,
+            userId: fetchedUser._id
+          });
+        }
+      );
     })
     .catch(err => {
       return res.status(401).json({
-        message: 'Login failed'
+        message: err
       });
-  });
-}
-
-exports.authenticateUser = async (req, res, next) => {
-  try {
-    const id = jwt.verify(req.params.token, process.env.JWT_KEY);
-    User.updateOne({_id: id}, {active: true})
-      .then(res => {
-        User.findById(id)
-          .then(result => {
-            transporter.sendMail({
-              to: `${result.email}`,
-              subject: `Approved Access to SPU`,
-              html: `Hi ${result.email}, You have been authenticated! Login <a href="http://localhost:4200/login"> here</a>`
-            });
-          });
     });
-
-  } catch(err) {
-    console.log(err);
-  }
-  return res.redirect('http://localhost:4200/');
-}
-
-exports.resetPassword = (req, res, next) => {
-  // this will send an email to this user with a link
-  console.log(req.body.email);
-  res.status(201).json({
-    message: 'Reset!'
-  });
-}
+};
