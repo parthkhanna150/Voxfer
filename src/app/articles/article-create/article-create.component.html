@@ -6,6 +6,10 @@
         <mat-error *ngIf="title.invalid">Please enter a valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
+          <input matInput minlength="3" required name="authors" placeholder="Authors" #authors>
+          <mat-error *ngIf="authors.invalid">Please enter valid author names</mat-error>
+      </mat-form-field>
+      <mat-form-field>
           <mat-chip-list #chipList aria-label="Category selection">
             <mat-chip
               *ngFor="let category of categories"

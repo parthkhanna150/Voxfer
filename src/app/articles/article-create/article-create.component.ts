@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, NgForm} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {Observable, Subscribable, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categories } from 'src/app/models/mock-categories';
@@ -142,10 +142,12 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.articleService.addArticle(form.value.title, this.categories, this.contentModel.editorData, this.summaryModel.editorData);
+      this.articleService.addArticle(
+        form.value.title, form.value.authors, this.categories, this.contentModel.editorData, this.summaryModel.editorData
+        );
     } else {
       this.articleService.updateArticle(
-        this.articleId, form.value.title, this.categories, this.contentModel.editorData, this.summaryModel.editorData
+        this.articleId, form.value.title, form.value.authors, this.categories, this.contentModel.editorData, this.summaryModel.editorData
         );
     }
     form.resetForm();
