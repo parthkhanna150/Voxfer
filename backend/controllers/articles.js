@@ -17,6 +17,7 @@ exports.createArticle = (req, res, next) => {
   const article = new Article({
     title: req.body.title,
     content: req.body.content,
+    summary: req.body.summary,
     creator: req.userData.userId,
     categories: req.body.categories
   });
@@ -39,6 +40,7 @@ exports.updateArticle  = (res, req, next) => {
     _id: req.req.body.id,
     title: req.req.body.title,
     content: req.req.body.content,
+    summary: eq.req.body.summary,
     categories: req.req.body.categories,
     creator: req.req.userData.userId
   });
