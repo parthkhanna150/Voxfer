@@ -12,7 +12,7 @@ import { categories } from 'src/app/models/mock-categories';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Article } from 'src/app/models/article';
 import { AuthService } from 'src/app/auth/auth.service';
-import { sample } from 'src/app/articles/article-create/sample.model';
+import { sampleContent, sampleSummary } from 'src/app/articles/article-create/sample.model';
 
 @Component({
   selector: 'app-article-create',
@@ -30,7 +30,7 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   categories: string[] = ['Chemistry'];
   allCategories: string[] = categories;
   public Editor = ClassicEditor;
-  sampleContent = sample;
+  sampleContent = sampleContent;
   public model = {
     editorData: this.sampleContent
   };
