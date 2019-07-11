@@ -21,7 +21,7 @@
       <br>
       <br>
       <mat-divider></mat-divider>
-      <div [innerHTML]='article?.summary | safeHtml'></div>
+      <div *ngIf="article.summary!==undefined" [innerHTML]='article?.summary | safeHtml'></div>
       <mat-divider></mat-divider>
       <mat-card-content>
           <div [innerHTML]='article?.content | safeHtml'></div>
