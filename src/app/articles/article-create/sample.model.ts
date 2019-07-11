@@ -14,7 +14,3 @@ export const sampleContent = '<div>\
 <p>Conclusion goes here...</p>\
 <h3>References</h3>\
 <p>References goes here...</p></div>';
-
-export const sampleSummary = '<div>\
-<h3>Summary</h3>\
-<p>Summary goes here...</p></div>';
