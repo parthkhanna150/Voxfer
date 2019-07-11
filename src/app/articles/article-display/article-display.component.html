@@ -11,6 +11,7 @@
             </button>
           </div>
           <mat-card-title>{{article?.title}}</mat-card-title>
+          <mat-card-subtitle>{{article?.authors}}</mat-card-subtitle>
         </mat-card-header>
       <div>
           <mat-chip-list class="chips" *ngFor="let category of article?.categories" aria-label="categories">

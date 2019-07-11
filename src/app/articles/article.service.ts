@@ -20,10 +20,11 @@ export class ArticleService {
   constructor(public router: Router,
               private http: HttpClient) {}
 
-  addArticle(title: string, tags: string[], content: string, summary: string) {
+  addArticle(title: string, authors: string, tags: string[], content: string, summary: string) {
     const article: Article = {
       id: null,
       title: title,
+      authors: authors,
       content: content,
       summary: summary,
       categories: tags,
@@ -49,16 +50,16 @@ export class ArticleService {
     return this.http.get<{article: any}>(BACKEND_URL + '/' + id);
   }
 
-  updateArticle(id: string, title: string, tags: string[], content: string, summary: string) {
+  updateArticle(id: string, title: string, authors: string, tags: string[], content: string, summary: string) {
     const article: Article = {
       id: id,
       title: title,
+      authors: authors,
       content: content,
       summary: summary,
       categories: tags,
       creator: null
     };
-
     this.http.put(BACKEND_URL + '/' + id, article)
       .subscribe((res) => {
         const updatedArticles = [...this.articles];
@@ -97,6 +98,7 @@ export class ArticleService {
           return {
             id: article._id,
             title: article.title,
+            authors: article.authors,
             content: article.content,
             summary: article.summary,
             creator: article.creator,
@@ -131,6 +133,7 @@ export class ArticleService {
         return {
           id: article._id,
           title: article.title,
+          authors: article.authors,
           content: article.content,
           summary: article.summary,
           creator: article.creator,
