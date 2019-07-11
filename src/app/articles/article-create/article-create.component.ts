@@ -74,6 +74,7 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
             this.article = {
               id: articleData.article._id,
               title: articleData.article.title,
+              authors: articleData.article.authors,
               content: articleData.article.content,
               summary: articleData.article.summary,
               categories:  articleData.article.categories,
