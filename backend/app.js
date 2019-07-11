@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = express();
 
-const articlesRoutes = require('./routes/articles')
-const userRoutes = require('./routes/user');
-
 // Load Environment Variables into process.env from a custom .env file
 dotenv.config({path: __dirname + '/.env'});
+
+const articlesRoutes = require('./routes/articles')
+const userRoutes = require('./routes/user');
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
