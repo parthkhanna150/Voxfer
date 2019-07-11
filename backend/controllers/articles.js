@@ -36,22 +36,22 @@ exports.createArticle = (req, res, next) => {
   });
 }
 
-exports.updateArticle  = (res, req, next) => {
+exports.updateArticle  = (req, res, next) => {
   const article = new Article({
-    _id: req.req.body.id,
-    title: req.req.body.title,
-    authors: req.req.body.authors,
-    content: req.req.body.content,
-    summary: req.req.body.summary,
-    categories: req.req.body.categories,
-    creator: req.req.userData.userId
+    _id: req.body.id,
+    title: req.body.title,
+    authors: req.body.authors,
+    content: req.body.content,
+    summary: req.body.summary,
+    categories: req.body.categories,
+    creator: req.userData.userId
   });
-  Article.updateOne({_id: req.req.params.id, creator: req.req.userData.userId}, article)
+  Article.updateOne({_id: req.params.id, creator: req.userData.userId}, article)
     .then(result => {
       if (result.n > 0) {
-        res.res.status(200).json({ message: "Update successful!" });
+        res.status(200).json({ message: "Update successful!" });
       } else {
-        res.res.status(401).json({ message: "Not Authorized!" });
+        res.status(401).json({ message: "Not Authorized!" });
       }
     })
     .catch(error => {
