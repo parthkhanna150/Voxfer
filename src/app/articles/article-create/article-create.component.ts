@@ -75,10 +75,12 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
               id: articleData.article._id,
               title: articleData.article.title,
               content: articleData.article.content,
+              summary: articleData.article.summary,
               categories:  articleData.article.categories,
               creator: articleData.article.creator
             };
-            this.model.editorData = this.article.content;
+            this.summaryModel.editorData = this.article.summary;
+            this.contentModel.editorData = this.article.content;
             this.categories = this.article.categories;
             this.articleService.headerUpdate(false);
           });
@@ -140,9 +142,11 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.articleService.addArticle(form.value.title, this.categories, this.model.editorData);
+      this.articleService.addArticle(form.value.title, this.categories, this.contentModel.editorData, this.summaryModel.editorData);
     } else {
-      this.articleService.updateArticle(this.articleId, form.value.title, this.categories, this.model.editorData);
+      this.articleService.updateArticle(
+        this.articleId, form.value.title, this.categories, this.contentModel.editorData, this.summaryModel.editorData
+        );
     }
     form.resetForm();
   }
