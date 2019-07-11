@@ -1,5 +1,5 @@
 export const sampleContent = '<div>\
-<h2>Sample Journal Title</h2>\
+<h1>Sample Journal Title</h1>\
 <h3>Abstract</h3>\
 <p>Abstract goes here...</p>\
 <h3>Introduction</h3>\
