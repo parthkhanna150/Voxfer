@@ -31,7 +31,10 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   allCategories: string[] = categories;
   public Editor = ClassicEditor;
   sampleContent = sampleContent;
-  sampleSummary = '<div><h3>Summary</h3><p>Summary goes here...</p></div>';
+  sampleSummary = '<div><h3>Summary</h3><p>Please enter text for the Summary here.</p>\
+  <figure class="image">\
+  <img alt="Graphical Abstract" src="https://40370.cdn.cke-cs.com/e4jFyCcE3za2em2hTchK/images/35cd21c61235b80034178b6e3cf72a2dbcae06ee93c2eb76.jpg" srcset="https://40370.cdn.cke-cs.com/e4jFyCcE3za2em2hTchK/images/35cd21c61235b80034178b6e3cf72a2dbcae06ee93c2eb76.jpg/w_96 96w, https://40370.cdn.cke-cs.com/e4jFyCcE3za2em2hTchK/images/35cd21c61235b80034178b6e3cf72a2dbcae06ee93c2eb76.jpg/w_176 176w, https://40370.cdn.cke-cs.com/e4jFyCcE3za2em2hTchK/images/35cd21c61235b80034178b6e3cf72a2dbcae06ee93c2eb76.jpg/w_256 256w" sizes="100vw" width="256">\
+  <figcaption>Graphical Abstract</figcaption></figure></div>';
   public summaryModel = {
     editorData: this.sampleSummary
   };
