@@ -11,6 +11,7 @@
             </button>
           </div>
           <mat-card-title>{{article?.title}}</mat-card-title>
+          <mat-card-subtitle>{{article?.authors}}</mat-card-subtitle>
         </mat-card-header>
       <div>
           <mat-chip-list class="chips" *ngFor="let category of article?.categories" aria-label="categories">
@@ -19,6 +20,8 @@
       </div>
       <br>
       <br>
+      <mat-divider></mat-divider>
+      <div *ngIf="article.summary!==undefined" [innerHTML]='article?.summary | safeHtml'></div>
       <mat-divider></mat-divider>
       <mat-card-content>
           <div [innerHTML]='article?.content | safeHtml'></div>
