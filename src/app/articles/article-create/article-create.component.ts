@@ -5,13 +5,14 @@ import { MatChipInputEvent } from '@angular/material';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, NgForm} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {Observable, Subscribable, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categories } from 'src/app/models/mock-categories';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Article } from 'src/app/models/article';
 import { AuthService } from 'src/app/auth/auth.service';
+import { sampleContent } from 'src/app/articles/article-create/sample.model';
 
 @Component({
   selector: 'app-article-create',
@@ -29,9 +30,15 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   categories: string[] = ['Chemistry'];
   allCategories: string[] = categories;
   public Editor = ClassicEditor;
-  public model = {
-    editorData: '<p>Admin\'s recommendation: Use Heading-1 for Title, Heading-2 for all subheadings</p>'
+  sampleContent = sampleContent;
+  sampleSummary = '<div><h3>Summary</h3><p>Summary goes here...</p></div>';
+  public summaryModel = {
+    editorData: this.sampleSummary
   };
+  public contentModel = {
+    editorData: this.sampleContent
+  };
+
   private articleId = null;
   private mode = 'create';
   article: Article;
@@ -67,11 +74,14 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
             this.article = {
               id: articleData.article._id,
               title: articleData.article.title,
+              authors: articleData.article.authors,
               content: articleData.article.content,
+              summary: articleData.article.summary,
               categories:  articleData.article.categories,
               creator: articleData.article.creator
             };
-            this.model.editorData = this.article.content;
+            this.summaryModel.editorData = this.article.summary;
+            this.contentModel.editorData = this.article.content;
             this.categories = this.article.categories;
             this.articleService.headerUpdate(false);
           });
@@ -133,9 +143,13 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.articleService.addArticle(form.value.title, this.categories, this.model.editorData);
+      this.articleService.addArticle(
+        form.value.title, form.value.authors, this.categories, this.contentModel.editorData, this.summaryModel.editorData
+        );
     } else {
-      this.articleService.updateArticle(this.articleId, form.value.title, this.categories, this.model.editorData);
+      this.articleService.updateArticle(
+        this.articleId, form.value.title, form.value.authors, this.categories, this.contentModel.editorData, this.summaryModel.editorData
+        );
     }
     form.resetForm();
   }

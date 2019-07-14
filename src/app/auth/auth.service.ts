@@ -97,11 +97,12 @@ export class AuthService {
     this.http.post(BACKEND_URL + '/signup', authData)
       .subscribe(() => {
         setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 3000);
+        this.router.navigate(['/']);
+        }, 2500);
       }, error => {
-        this.authStatusListener.next(false);
-      });
+          this.authStatusListener.next(false);
+          this.router.navigate(['/']);
+        });
   }
 
   login(email: string, password: string) {

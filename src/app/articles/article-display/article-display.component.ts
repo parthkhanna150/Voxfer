@@ -41,7 +41,9 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
               this.article = {
                 id: response.article._id,
                 title: response.article.title,
+                authors: response.article.authors,
                 content: response.article.content,
+                summary: response.article.summary,
                 categories:  response.article.categories,
                 creator: response.article.creator
               };

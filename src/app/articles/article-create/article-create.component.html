@@ -6,6 +6,10 @@
         <mat-error *ngIf="title.invalid">Please enter a valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
+          <input matInput minlength="3" required name="authors" [ngModel]="article?.authors" placeholder="Authors" #authors="ngModel">
+          <mat-error *ngIf="authors.invalid">Please enter valid author names</mat-error>
+      </mat-form-field>
+      <mat-form-field>
           <mat-chip-list #chipList aria-label="Category selection">
             <mat-chip
               *ngFor="let category of categories"
@@ -32,8 +36,42 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <ckeditor [(ngModel)]="model.editorData"  name="ckeditor" [editor]="Editor"
+        <ckeditor [(ngModel)]="summaryModel.editorData"  name="ckeditor1" [editor]="Editor"
         [config]="{
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo'
+            ]
+          },
+          cloudServices: {
+            tokenUrl: 'https://40370.cke-cs.com/token/dev/Blaai9MtjI5UdkqrP5SN1l5n6kbFUGIXXYfjAQuEpoZoGNBza9tr4hRYnUcR',
+            uploadUrl: 'https://40370.cke-cs.com/easyimage/upload/'
+          }
+        }">
+        </ckeditor>
+
+        <ckeditor [(ngModel)]="contentModel.editorData" name="ckeditor2" [editor]="Editor"
+        [config]="{
+          heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading3', view: 'h3', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading5', view: 'h4', title: 'Heading 3', class: 'ck-heading_heading2' }
+            ]
+          },
           toolbar: {
             items: [
               'heading',
