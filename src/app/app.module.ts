@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AngularMaterialModule } from './angular-material.module';
 
 import { HomeComponent } from './home/home.component';
@@ -46,9 +46,10 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    CKEditorModule,
     HttpClientModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

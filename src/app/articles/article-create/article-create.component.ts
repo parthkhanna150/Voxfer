@@ -7,7 +7,6 @@ import {FormControl, NgForm} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
 import {Observable, Subscription} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categories } from 'src/app/models/mock-categories';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Article } from 'src/app/models/article';
@@ -29,7 +28,6 @@ export class ArticleCreateComponent implements OnInit, OnDestroy {
   filteredCategories: Observable<string[]>;
   categories: string[] = ['Chemistry'];
   allCategories: string[] = categories;
-  public Editor = ClassicEditor;
   sampleContent = sampleContent;
   sampleSummary = '<div><h3>Summary</h3><p>Please enter text for the Summary here.</p>\
   <figure class="image">\
