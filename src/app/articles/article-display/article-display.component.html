@@ -4,7 +4,7 @@
         <mat-card-header>
           <div *ngIf="userIsAuthenticated && article.creator.includes(userId)"  class="edit-delete">
             <mat-form-field>
-              <input minlength="3" [(ngModel)]="accessEmail" required matInput type="email" placeholder="Give Rights to..." name="email" email>
+              <input minlength="3" [(ngModel)]="accessEmail" matInput type="email" placeholder="Give Rights to..." name="email" email>
             </mat-form-field>
             <button mat-button (click)="allowUser(accessEmail, article.id); accessEmail=''">
                 <mat-icon aria-hidden="false" aria-label="acess icon">search</mat-icon>

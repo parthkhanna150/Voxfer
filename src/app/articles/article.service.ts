@@ -158,10 +158,12 @@ export class ArticleService {
         if (this.isUser) {
           this.http.put<{message: string}>(BACKEND_URL + '/invite/' + articleID, {accessAuthorId: response.accessAuthorId})
             .subscribe(res => {
-              console.log(res.message);
+              if (res.message === 'Access Update successful!') {
+                alert('Access Update Successful!');
+              }
             });
         } else {
-          console.log('Cannot give access because the user is not signed up. Make sure the invitee is signed up');
+            alert('Access Update Failed!');
         }
       });
   }
