@@ -3,11 +3,13 @@
     <mat-card *ngIf="!isLoading" class="content-card">
         <mat-card-header>
           <div *ngIf="userIsAuthenticated && article.creator.includes(userId)"  class="edit-delete">
-            <input minlength="3" [(ngModel)]="accessEmail" required matInput type="email" placeholder="Give Rights to..." name="email" email>
+            <mat-form-field>
+              <input minlength="3" [(ngModel)]="accessEmail" required matInput type="email" placeholder="Give Rights to..." name="email" email>
+            </mat-form-field>
             <button mat-button (click)="allowUser(accessEmail, article.id); accessEmail=''">
                 <mat-icon aria-hidden="false" aria-label="acess icon">search</mat-icon>
             </button>
-            <a mat-button [routerLink]="['/edit', id]">
+          <a mat-button [routerLink]="['/edit', id]">
               <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
             </a>
             <button mat-button (click)="onDelete(id)">
