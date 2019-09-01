@@ -14,6 +14,7 @@ const BACKEND_URL = environment.apiUrl + 'articles';
 })
 export class ArticleService {
   private isHomeUpdated = new Subject<boolean>();
+  isUser = false;
   articles: Article[] = [];
   searchResults: Article[];
   private articlesUpdated = new Subject<Article[]>();
@@ -151,14 +152,18 @@ export class ArticleService {
 
   allowUser(accessEmail: string, articleID: string) {
     console.log('allowUser in Article Service');
-    // check if this email is a user already
-    // YES -> Node already added in the list of creators of this articleID
-    // NO -> Node returns predecided error code for User not found or Article not found
-    // DONE.
-    if (this.authService.isUser(accessEmail)) {
-      this.http.post(BACKEND_URL + '/invite', accessEmail);
-    } else {
-      console.log('Cannot give access because the user is not signed up. Make sure the invitee is signed up');
-    }
+    this.authService.isUser(accessEmail)
+      .subscribe(response => {
+        this.isUser = response.isUser;
+        if (this.isUser) {
+          console.log('LETS ADD THIS USER TO THE LIST OF CREATORS FOR THIS ARTICLEID');
+          this.http.post<{message: string}>(BACKEND_URL + '/invite/' + articleID, {accessEmail: accessEmail})
+            .subscribe(res => {
+              console.log(res.message);
+            });
+        } else {
+          console.log('Cannot give access because the user is not signed up. Make sure the invitee is signed up');
+        }
+      });
   }
 }

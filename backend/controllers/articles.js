@@ -12,6 +12,14 @@ exports.getArticles =  (req, res, next) => {
   });
 }
 
+exports.addCreator = (req, res, next) => {
+  // Add req.body.accessEmail to the creator array of the article id = req.params.id
+  console.log(req.body.accessEmail + "\n" + req.params.id);
+  res.status(200).json({
+    message: "Done"
+  });
+}
+
 exports.createArticle = (req, res, next) => {
   let savedArticle;
   const article = new Article({

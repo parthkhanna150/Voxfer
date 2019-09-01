@@ -130,13 +130,7 @@ export class AuthService {
 
   isUser(userEmail: string) {
     console.log('allowUser in Auth Service');
-    this.http.get<{isUser: boolean}>(BACKEND_URL + '/?userEmail=' + userEmail)
-      .subscribe(response => {
-        console.log(response);
-        return response.isUser;
-      });
-      console.log('IsUser: returning default boolean');
-      return false;
+    return this.http.get<{isUser: boolean}>(BACKEND_URL + '/?userEmail=' + userEmail);
   }
 
   logout() {
