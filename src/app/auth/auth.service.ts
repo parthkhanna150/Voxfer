@@ -129,8 +129,7 @@ export class AuthService {
   }
 
   isUser(userEmail: string) {
-    console.log('allowUser in Auth Service');
-    return this.http.get<{isUser: boolean}>(BACKEND_URL + '/?userEmail=' + userEmail);
+    return this.http.get<{isUser: boolean, accessAuthorId: string}>(BACKEND_URL + '/?userEmail=' + userEmail);
   }
 
   logout() {

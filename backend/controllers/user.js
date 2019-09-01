@@ -21,19 +21,22 @@ exports.checkUser = (req, res, next) => {
   User.findOne({ email: req.query.userEmail })
     .then(user => {
       console.log(user);
-      if (!user) {
+      if (user) {
         res.status(200).json({
-          isUser: false
+          isUser: true,
+          accessAuthorId: user._id,
         });
       } else{
         res.status(200).json({
-          isUser: true
+          isUser: false,
+          accessAuthorId: 'false'
         });
       }
     })
     .catch(user => {
       res.status(500).json({
-        isUser: false
+        isUser: false,
+        accessAuthorId: 'error'
       })
     });
   }

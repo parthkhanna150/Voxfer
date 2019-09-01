@@ -5,5 +5,5 @@ export class Article {
   content: string;
   summary: string;
   categories:  string[];
-  creator: string;
+  creator: string[];
 }

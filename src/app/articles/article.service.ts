@@ -151,13 +151,12 @@ export class ArticleService {
   }
 
   allowUser(accessEmail: string, articleID: string) {
-    console.log('allowUser in Article Service');
     this.authService.isUser(accessEmail)
       .subscribe(response => {
+        console.log(response);
         this.isUser = response.isUser;
         if (this.isUser) {
-          console.log('LETS ADD THIS USER TO THE LIST OF CREATORS FOR THIS ARTICLEID');
-          this.http.post<{message: string}>(BACKEND_URL + '/invite/' + articleID, {accessEmail: accessEmail})
+          this.http.put<{message: string}>(BACKEND_URL + '/invite/' + articleID, {accessAuthorId: response.accessAuthorId})
             .subscribe(res => {
               console.log(res.message);
             });

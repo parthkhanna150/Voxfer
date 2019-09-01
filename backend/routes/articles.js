@@ -8,7 +8,7 @@ router.get('', ArticleController.getArticles);
 
 router.post('', checkAuth, ArticleController.createArticle);
 
-router.post('/invite/:id', checkAuth, ArticleController.addCreator);
+router.put('/invite/:id', checkAuth, ArticleController.addCreator);
 
 router.put("/:id", checkAuth, ArticleController.updateArticle);
 
