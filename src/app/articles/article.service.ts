@@ -5,6 +5,7 @@ import { Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 const BACKEND_URL = environment.apiUrl + 'articles';
 
@@ -18,7 +19,8 @@ export class ArticleService {
   private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router,
-              private http: HttpClient) {}
+              private http: HttpClient,
+              private authService: AuthService) {}
 
   addArticle(title: string, authors: string, tags: string[], content: string, summary: string) {
     const article: Article = {
@@ -145,5 +147,18 @@ export class ArticleService {
 
   headerUpdate(isHome: boolean) {
     this.isHomeUpdated.next(isHome);
+  }
+
+  allowUser(accessEmail: string, articleID: string) {
+    console.log('allowUser in Article Service');
+    // check if this email is a user already
+    // YES -> Node already added in the list of creators of this articleID
+    // NO -> Node returns predecided error code for User not found or Article not found
+    // DONE.
+    if (this.authService.isUser(accessEmail)) {
+      this.http.post(BACKEND_URL + '/invite', accessEmail);
+    } else {
+      console.log('Cannot give access because the user is not signed up. Make sure the invitee is signed up');
+    }
   }
 }

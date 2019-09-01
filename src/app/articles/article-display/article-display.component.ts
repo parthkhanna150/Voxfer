@@ -20,6 +20,7 @@ export class SafeHtmlPipe implements PipeTransform  {
   styleUrls: ['./article-display.component.css']
 })
 export class ArticleDisplayComponent implements OnInit, OnDestroy {
+  accessEmail: string;
   userId: string;
   article: Article;
   id: string;
@@ -92,6 +93,10 @@ export class ArticleDisplayComponent implements OnInit, OnDestroy {
         menuLi.appendChild(menuA);
         menuUl.appendChild(menuLi);
       });
+    }
+
+    allowUser(accessEmail: string, articleId: string) {
+      this.articleService.allowUser(accessEmail, articleId);
     }
 
     onDelete(id: string) {
