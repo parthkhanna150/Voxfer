@@ -31,11 +31,13 @@
     "express": "^4.17.0",
     "hammerjs": "^2.0.8",
     "jsonwebtoken": "^8.5.1",
+    "mixin-deep": ">=1.3.2",
     "mongoose": "^5.5.13",
     "mongoose-unique-validator": "^2.0.3",
     "ngx-markdown": "^7.1.3",
     "nodemailer": "^6.2.1",
     "rxjs": "~6.3.3",
+    "set-value": "^3.0.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
