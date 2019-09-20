@@ -128,6 +128,10 @@ export class AuthService {
       });
   }
 
+  isUser(userEmail: string) {
+    return this.http.get<{isUser: boolean, accessAuthorId: string}>(BACKEND_URL + '/?userEmail=' + userEmail);
+  }
+
   logout() {
     this.token = null;
     this.isAuthenticated = false;

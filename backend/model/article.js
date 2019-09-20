@@ -5,7 +5,7 @@ const articleSchema = mongoose.Schema({
   authors: {type: String, required: true},
   content: {type: String, required: true},
   summary: {type: String, required: true},
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+  creator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}],
   categories: [{type: String, required: true}]
 });
 

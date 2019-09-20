@@ -16,6 +16,31 @@ function logError(res, errorCode, error) {
   return res.status(errorCode).json({ message: error });
 }
 
+exports.checkUser = (req, res, next) => {
+  console.log(req.query.userEmail);
+  User.findOne({ email: req.query.userEmail })
+    .then(user => {
+      console.log(user);
+      if (user) {
+        res.status(200).json({
+          isUser: true,
+          accessAuthorId: user._id,
+        });
+      } else{
+        res.status(200).json({
+          isUser: false,
+          accessAuthorId: 'false'
+        });
+      }
+    })
+    .catch(user => {
+      res.status(500).json({
+        isUser: false,
+        accessAuthorId: 'error'
+      })
+    });
+  }
+
 exports.createUser = (req, res, next) => {
   const user = new User({
     email: req.body.email,

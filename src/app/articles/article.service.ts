@@ -5,6 +5,7 @@ import { Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 const BACKEND_URL = environment.apiUrl + 'articles';
 
@@ -13,12 +14,14 @@ const BACKEND_URL = environment.apiUrl + 'articles';
 })
 export class ArticleService {
   private isHomeUpdated = new Subject<boolean>();
+  isUser = false;
   articles: Article[] = [];
   searchResults: Article[];
   private articlesUpdated = new Subject<Article[]>();
 
   constructor(public router: Router,
-              private http: HttpClient) {}
+              private http: HttpClient,
+              private authService: AuthService) {}
 
   addArticle(title: string, authors: string, tags: string[], content: string, summary: string) {
     const article: Article = {
@@ -145,5 +148,23 @@ export class ArticleService {
 
   headerUpdate(isHome: boolean) {
     this.isHomeUpdated.next(isHome);
+  }
+
+  allowUser(accessEmail: string, articleID: string) {
+    this.authService.isUser(accessEmail)
+      .subscribe(response => {
+        console.log(response);
+        this.isUser = response.isUser;
+        if (this.isUser) {
+          this.http.put<{message: string}>(BACKEND_URL + '/invite/' + articleID, {accessAuthorId: response.accessAuthorId})
+            .subscribe(res => {
+              if (res.message === 'Access Update successful!') {
+                alert('Access Update Successful!');
+              }
+            });
+        } else {
+            alert('Access Update Failed!');
+        }
+      });
   }
 }

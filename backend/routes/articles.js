@@ -8,6 +8,8 @@ router.get('', ArticleController.getArticles);
 
 router.post('', checkAuth, ArticleController.createArticle);
 
+router.put('/invite/:id', checkAuth, ArticleController.addCreator);
+
 router.put("/:id", checkAuth, ArticleController.updateArticle);
 
 router.get("/:id", ArticleController.getArticleById);
